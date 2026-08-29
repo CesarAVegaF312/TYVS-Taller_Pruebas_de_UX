@@ -18,15 +18,19 @@ const AxeBuilder = require('@axe-core/playwright').default;
  * ⚠️ LÍMITE IMPORTANTE, y es lo más valioso de este módulo:
  * axe detecta de forma fiable alrededor del 40% de los problemas WCAG. Son
  * los mecánicos: contraste insuficiente, imágenes sin texto alternativo,
- * campos sin etiqueta, jerarquía de encabezados rota.
+ * botones y enlaces sin nombre accesible.
  *
- * El 60% restante exige juicio humano y NINGUNA herramienta lo automatiza:
+ * El resto exige juicio humano y NINGUNA herramienta lo automatiza:
  * ¿el texto alternativo describe la imagen o solo dice "imagen"? ¿el orden
  * de tabulación sigue el orden lógico de la tarea? ¿el mensaje de error
  * explica cómo corregir el problema?
  *
  * Una suite de axe en verde NO significa "el sitio es accesible".
  * Significa "no tiene los errores que una máquina puede detectar sola".
+ *
+ * Todo esto suena a advertencia genérica hasta que se mide. Eso hace el
+ * módulo 3B (modulo3b-defectos-sembrados.spec.js): audita una página con 17
+ * defectos deliberados y comprueba cuáles encuentra axe y cuáles no.
  */
 
 test.describe('Módulo 3 — Accesibilidad (WCAG 2.1 AA)', () => {

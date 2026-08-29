@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  PÁGINA DE ENTRENAMIENTO — CONTIENE DEFECTOS DE ACCESIBILIDAD A PROPÓSITO
+  ============================================================================
+
+  NO copie nada de este archivo a un proyecto real.
+
+  index.html es la versión correcta y pasa axe con cero violaciones. El
+  problema pedagógico de una suite siempre verde es que usted nunca ve la
+  herramienta hacer su trabajo, y no aprende a leer un reporte de fallo.
+
+  Esta página existe para eso, y para algo más importante: mostrar que los
+  defectos NO se reparten en dos montones ("los que la herramienta encuentra"
+  y "los que no"), sino en TRES. La diferencia entre el grupo A y el grupo B
+  no está en el defecto: está en cómo configuró usted la herramienta.
+
+    GRUPO A — axe los reporta con el filtro .withTags([...wcag...])
+    GRUPO B — axe los reporta SOLO si quita ese filtro (son best-practice)
+    GRUPO C — axe NO los reporta nunca; exigen juicio humano
+
+  Los grupos A y B se verifican en tests/modulo3b-defectos-sembrados.spec.js.
+  El grupo C se busca a mano, con la lista de chequeo del README.
+
+  Cada defecto está marcado abajo con un comentario [A-n], [B-n] o [C-n].
+  La clasificación no es una opinión: se midió ejecutando axe sobre esta
+  misma página. Si actualiza @axe-core/playwright y algo cambia de grupo,
+  el módulo 3B falla y le dice exactamente qué se movió.
+-->
+<!-- [A-1] html-has-lang: falta lang="es". Un lector de pantalla no sabe en
+     qué idioma pronunciar el texto y lo lee con fonética inglesa. -->
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registraduría — Inscripción (versión con defectos)</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f2f4f6;
+      color: #1a1f24;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .aviso {
+      background: #a4262c;
+      color: #fff;
+      padding: 0.9rem 1rem;
+      font-weight: 600;
+    }
+    header { background: #12566b; color: #fff; padding: 1.5rem 1rem; }
+    header h1 { margin: 0; font-size: 1.6rem; }
+    .contenido { max-width: 34rem; margin: 2rem auto; padding: 0 1rem; }
+    form {
+      background: #fff;
+      border: 1px solid #b9c2cb;
+      border-radius: 6px;
+      padding: 1.5rem;
+    }
+    .campo { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1.15rem; }
+    input, select {
+      font: inherit;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid #b9c2cb;
+      border-radius: 4px;
+    }
+    /* [A-2] color-contrast: #adb5bd sobre #ffffff da aproximadamente 1.9:1.
+       WCAG 2.1 AA exige 4.5:1 para texto normal. */
+    .ayuda { margin: 0; font-size: 0.85rem; color: #adb5bd; }
+    /* [A-3] el mismo defecto en el pie de página: #c2c9d0 sobre #f2f4f6.
+       Son dos nodos de la misma regla, y axe los reporta por separado. */
+    footer { max-width: 34rem; margin: 0 auto 2rem; padding: 0 1rem;
+             color: #c2c9d0; font-size: 0.85rem; }
+    button {
+      font: inherit; font-weight: 600; background: #12566b; color: #fff;
+      border: 0; border-radius: 4px; padding: 0.7rem 1.2rem;
+      cursor: pointer; width: 100%;
+    }
+    /* El botón y el enlace de ayuda solo muestran un icono de fondo,
+       sin texto ni aria-label. Ver [A-5] y [A-6]. */
+    .icono {
+      display: inline-block;
+      width: 2rem; height: 2rem; padding: 0; border-radius: 50%;
+      background: #12566b url(logo.svg) center/1.1rem no-repeat;
+    }
+    /* [C-3] outline:none elimina el indicador de foco (WCAG 2.4.7). Quien
+       navega con teclado pierde de vista dónde está parado.
+       axe NO lo detecta: tendría que comparar el render con y sin foco, y
+       no hay forma de decidir automáticamente si algún otro estilo lo
+       sustituye. Este defecto se encuentra tabulando por la página. */
+    input:focus, select:focus, button:focus, a:focus { outline: none; }
+    .error { margin: 0 0 1rem; font-size: 0.875rem; color: #a4262c; font-weight: 600; }
+    #resultado { background: #fff; border: 1px solid #b9c2cb; border-radius: 6px;
+                 padding: 1.15rem 1.25rem; margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+  <p class="aviso">
+    Página de entrenamiento con defectos deliberados. La versión correcta
+    está en <a href="/" style="color:#fff">la página principal</a>.
+  </p>
+
+  <header>
+    <h1>Inscripción de votantes</h1>
+  </header>
+
+  <!-- [B-2] landmark-one-main y region: el contenido va en un <div> en vez de
+       un <main>. Quien navega por landmarks con lector de pantalla no puede
+       saltar al contenido. Son reglas best-practice: axe las calla si usted
+       filtra por etiquetas WCAG. -->
+  <div class="contenido">
+
+    <!-- [B-1] heading-order: se salta de h1 a h4. La jerarquía de encabezados
+         es el índice que usa un lector de pantalla para navegar la página.
+         También es best-practice, no WCAG. -->
+    <h4>Datos personales</h4>
+
+    <!-- [A-4] image-alt: <img> sin atributo alt. -->
+    <img src="logo.svg" width="48" height="48">
+
+    <!-- [C-2] alt inútil: "imagen" no aporta NADA que la persona no sepa ya.
+         axe lo da por bueno porque el atributo existe y no está vacío. Solo
+         un humano puede juzgar si el texto describe el contenido. -->
+    <img src="logo.svg" width="48" height="48" alt="imagen">
+
+    <form id="form-defectuoso" novalidate>
+
+      <!-- [C-1] EL DEFECTO MÁS INSTRUCTIVO DE LA PÁGINA.
+           El placeholder se usa como única etiqueta. Desaparece en cuanto se
+           empieza a escribir, así que quien se distrae ya no sabe qué iba en
+           el campo, y con zoom alto suele quedar recortado.
+
+           Y sin embargo axe lo APRUEBA: medimos que la regla `label` da este
+           input por bueno, porque el placeholder cuenta como nombre accesible
+           en el cálculo de accname. El nombre que ve el navegador es
+           "Nombre completo".
+
+           O sea: la herramienta no distingue una etiqueta de un texto que se
+           borra solo. La comprobación propia del módulo 3 (que exige
+           <label for> o aria-label) sí lo encuentra. Escribir sus propias
+           aserciones no es redundante con axe. -->
+      <div class="campo">
+        <input type="text" id="d-nombre" placeholder="Nombre completo" tabindex="3">
+      </div>
+
+      <!-- [B-3] tabindex positivo: el orden de foco deja de seguir el orden
+           visual. Edad (tabindex=1) recibe el foco ANTES que documento (2) y
+           que nombre (3). axe SÍ tiene una regla para esto, pero también es
+           best-practice: no aparece si filtra por WCAG. -->
+      <div class="campo">
+        <label for="d-documento">Número de documento</label>
+        <input type="number" id="d-documento" min="1" tabindex="2">
+        <p class="ayuda">Solo números, sin puntos ni comas.</p>
+      </div>
+
+      <div class="campo">
+        <label for="d-edad">Edad</label>
+        <input type="number" id="d-edad" min="0" max="120" tabindex="1">
+      </div>
+
+      <!-- [A-7] select-name: un <select> sin etiqueta se anuncia como
+           "cuadro combinado" y nada más. -->
+      <div class="campo">
+        <select id="d-genero">
+          <option value="FEMALE">Femenino</option>
+          <option value="MALE">Masculino</option>
+          <option value="UNIDENTIFIED">Prefiero no declararlo</option>
+        </select>
+      </div>
+
+      <!-- [C-4] la etiqueta envuelve al input, lo cual es HTML válido y axe lo
+           aprueba. El problema es el texto: "Estado" no dice QUÉ significa
+           marcarlo. Compare con index.html, que dice "La persona está viva".
+           Ninguna herramienta puede juzgar eso. -->
+      <div class="campo">
+        <label><input type="checkbox" id="d-vivo" checked> Estado</label>
+      </div>
+
+      <button type="submit" id="d-btn-registrar">Registrar votante</button>
+
+      <!-- [A-5] button-name: botón sin nombre accesible. Se anuncia
+           simplemente como "botón". -->
+      <button type="button" class="icono" id="d-btn-ayuda"></button>
+
+      <!-- [A-6] link-name: enlace sin texto discernible. -->
+      <a href="/ayuda" id="d-link-ayuda"><span class="icono"></span></a>
+    </form>
+
+    <!-- [C-5] sin role="status" ni aria-live: el resultado aparece en pantalla
+         pero NO se anuncia. Quien no ve la pantalla no se entera de que el
+         formulario respondió. axe no puede saber que este <div> se llena
+         dinámicamente; para él es un contenedor vacío y correcto. -->
+    <div id="resultado" hidden>
+      <p id="resultado-titulo"></p>
+      <p id="resultado-detalle"></p>
+    </div>
+
+    <!-- [C-6] texto de enlace sin contexto. Un lector de pantalla puede listar
+         todos los enlaces de la página para navegar; fuera de la frase, "Haga
+         clic aquí" no dice a dónde lleva. -->
+    <p><a href="/">Haga clic aquí</a></p>
+  </div>
+
+  <footer>
+    <p>Universidad de La Sabana — Testing y Validación de Software</p>
+  </footer>
+
+  <script>
+    document.getElementById('form-defectuoso').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var documento = Number(document.getElementById('d-documento').value);
+      if (!documento || documento <= 0) {
+        // [C-7] mensaje de error que no dice cómo corregir el problema.
+        // WCAG 3.3.3 pide una sugerencia concreta. axe no evalúa la calidad
+        // del texto: para él basta con que el mensaje exista.
+        var err = document.getElementById('d-error');
+        if (!err) {
+          err = document.createElement('p');
+          err.id = 'd-error';
+          err.className = 'error';
+          document.getElementById('form-defectuoso').prepend(err);
+        }
+        err.textContent = 'Error.';
+        return;
+      }
+
+      document.getElementById('resultado-titulo').textContent = 'Inscripción exitosa';
+      document.getElementById('resultado-detalle').textContent = 'La persona quedó inscrita.';
+      document.getElementById('resultado').hidden = false;
+    });
+  </script>
+</body>
+</html>
