@@ -1,0 +1,174 @@
+/*
+ * Hoja de estilos de la Registraduría.
+ *
+ * Los colores están elegidos para cumplir WCAG 2.1 nivel AA:
+ * el contraste de texto sobre fondo supera 4.5:1 en todos los casos.
+ * Compruébelo usted mismo con axe en el Módulo 3.
+ */
+
+:root {
+  --tinta: #1a1f24;          /* sobre --papel: 14.8:1 */
+  --tinta-suave: #4a545e;    /* sobre --papel: 7.4:1  */
+  --papel: #ffffff;
+  --fondo: #f2f4f6;
+  --borde: #b9c2cb;
+  --acento: #12566b;         /* sobre blanco: 7.6:1   */
+  --acento-oscuro: #0d4152;
+  --error: #a4262c;          /* sobre --papel: 6.1:1  */
+  --exito: #1d6b3f;          /* sobre --papel: 5.6:1  */
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--tinta);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Enlace de salto: invisible hasta que recibe foco por teclado.
+   Es un requisito de WCAG 2.4.1 (evitar bloques repetidos). */
+.salto-contenido {
+  position: absolute;
+  left: -9999px;
+  background: var(--acento);
+  color: #fff;
+  padding: 0.75rem 1rem;
+  z-index: 10;
+}
+.salto-contenido:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+header {
+  background: var(--acento);
+  color: #fff;
+  padding: 1.5rem 1rem;
+}
+.marca {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+header h1 {
+  margin: 0.25rem 0 0;
+  font-size: 1.6rem;
+}
+
+main {
+  max-width: 34rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+form {
+  background: var(--papel);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  padding: 1.5rem;
+}
+
+.ayuda-general {
+  margin: 0 0 1.25rem;
+  color: var(--tinta-suave);
+  font-size: 0.925rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 1.15rem;
+  border: 0;
+  padding: 0;
+}
+
+label,
+legend {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  font: inherit;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: var(--papel);
+  color: var(--tinta);
+}
+
+/* Foco siempre visible: WCAG 2.4.7. Nunca usar outline:none sin reemplazo. */
+input:focus-visible,
+select:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--acento);
+  outline-offset: 2px;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.opcion label { font-weight: 400; }
+
+.ayuda {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+}
+
+.error {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--error);
+  font-weight: 600;
+}
+
+button {
+  font: inherit;
+  font-weight: 600;
+  background: var(--acento);
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+  width: 100%;
+}
+button:hover { background: var(--acento-oscuro); }
+
+#resultado {
+  background: var(--papel);
+  border: 1px solid var(--borde);
+  border-left: 5px solid var(--tinta-suave);
+  border-radius: 6px;
+  padding: 1.15rem 1.25rem;
+  margin-top: 1.5rem;
+}
+#resultado.exito { border-left-color: var(--exito); }
+#resultado.rechazo { border-left-color: var(--error); }
+
+#resultado h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+}
+#resultado p { margin: 0; color: var(--tinta-suave); }
+
+footer {
+  max-width: 34rem;
+  margin: 0 auto 2rem;
+  padding: 0 1rem;
+  color: var(--tinta-suave);
+  font-size: 0.85rem;
+}

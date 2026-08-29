@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registraduría — Inscripción de votantes</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <a class="salto-contenido" href="#contenido">Saltar al contenido principal</a>
+
+  <header>
+    <p class="marca">Registraduría Nacional</p>
+    <h1>Inscripción de votantes</h1>
+  </header>
+
+  <main id="contenido">
+    <form id="form-registro" novalidate>
+      <p class="ayuda-general" id="ayuda-form">
+        Todos los campos son obligatorios. Al enviar, el sistema verifica si la
+        persona cumple los requisitos para votar.
+      </p>
+
+      <div class="campo">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" name="nombre" required
+               autocomplete="name" aria-describedby="error-nombre">
+        <p class="error" id="error-nombre" hidden></p>
+      </div>
+
+      <div class="campo">
+        <label for="documento">Número de documento</label>
+        <input type="number" id="documento" name="documento" required
+               min="1" inputmode="numeric" aria-describedby="ayuda-documento error-documento">
+        <p class="ayuda" id="ayuda-documento">Solo números, sin puntos ni comas.</p>
+        <p class="error" id="error-documento" hidden></p>
+      </div>
+
+      <div class="campo">
+        <label for="edad">Edad</label>
+        <input type="number" id="edad" name="edad" required
+               min="0" max="120" aria-describedby="ayuda-edad error-edad">
+        <p class="ayuda" id="ayuda-edad">Debe ser mayor de 18 años para votar.</p>
+        <p class="error" id="error-edad" hidden></p>
+      </div>
+
+      <div class="campo">
+        <label for="genero">Género</label>
+        <select id="genero" name="genero" required>
+          <option value="FEMALE">Femenino</option>
+          <option value="MALE">Masculino</option>
+          <option value="UNIDENTIFIED">Prefiero no declararlo</option>
+        </select>
+      </div>
+
+      <fieldset class="campo">
+        <legend>Estado</legend>
+        <div class="opcion">
+          <input type="checkbox" id="vivo" name="vivo" checked>
+          <label for="vivo">La persona está viva</label>
+        </div>
+      </fieldset>
+
+      <button type="submit" id="btn-registrar">Registrar votante</button>
+    </form>
+
+    <!-- role="status" hace que los lectores de pantalla anuncien el resultado
+         sin que el usuario tenga que ir a buscarlo. -->
+    <section id="resultado" role="status" aria-live="polite" hidden>
+      <h2 id="resultado-titulo"></h2>
+      <p id="resultado-detalle"></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Universidad de La Sabana — Testing y Validación de Software</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
