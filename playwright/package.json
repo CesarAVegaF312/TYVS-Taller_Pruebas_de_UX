@@ -9,6 +9,7 @@
     "test:headed": "playwright test --headed",
     "test:e2e": "playwright test tests/modulo1-e2e.spec.js tests/modulo2-pom.spec.js",
     "test:a11y": "playwright test tests/modulo3-accesibilidad.spec.js",
+    "test:a11y:defectos": "playwright test tests/modulo3b-defectos-sembrados.spec.js",
     "test:visual": "playwright test tests/modulo4-visual.spec.js",
     "visual:update": "playwright test tests/modulo4-visual.spec.js --update-snapshots",
     "report": "playwright show-report"

@@ -46,10 +46,10 @@ Eso importa por tres razones:
 ```text
 .
 ├─ registraduria/                    # SISTEMA BAJO PRUEBA (Spring Boot)
-│   └─ src/main/resources/static/    # index.html, estilos.css, app.js
+│   └─ src/main/resources/static/    # index.html (correcta), defectuosa.html (17 defectos)
 ├─ playwright/                       # pista principal
 │   ├─ pages/                        # Page Objects
-│   └─ tests/                        # módulos 1 a 4
+│   └─ tests/                        # módulos 1, 2, 3, 3B y 4
 ├─ selenium-java/                    # pista alternativa
 │   └─ src/test/java/
 ├─ docs/
@@ -159,11 +159,49 @@ Aquí empieza la parte de UX. Auditoría automatizada de **WCAG 2.1 AA** con `ax
 
 Contexto: la accesibilidad dejó de ser opcional. El **European Accessibility Act** es exigible desde junio de 2025, y en Estados Unidos la ADA genera litigio constante sobre sitios web.
 
-> ⚠️ **El límite de axe es lo más valioso de este módulo.** axe detecta de forma fiable cerca del **40%** de los problemas WCAG: los mecánicos (contraste insuficiente, campos sin etiqueta, jerarquía de encabezados rota). El 60% restante exige juicio humano: ¿el texto alternativo *describe* la imagen o solo dice "imagen"? ¿el orden de tabulación sigue el orden lógico de la tarea?
+> ⚠️ **El límite de axe es lo más valioso de este módulo.** axe detecta de forma fiable cerca del **40%** de los problemas WCAG: los mecánicos (contraste insuficiente, `<img>` sin `alt`, botones y enlaces sin nombre accesible). El resto exige juicio humano: ¿el texto alternativo *describe* la imagen o solo dice "imagen"? ¿el orden de tabulación sigue el orden lógico de la tarea?
 >
 > **Una suite de axe en verde no significa "el sitio es accesible".** Significa "no tiene los errores que una máquina puede detectar sola".
 
+El **módulo 3B** convierte ese párrafo en algo comprobable: en vez de creerlo, usted lo mide sobre una página con defectos reales. Ahí verá, por ejemplo, que la frase "axe detecta campos sin etiqueta" es **falsa tal como suena**: detecta un `<select>` sin etiqueta, pero da por bueno un `<input>` cuya única etiqueta es un `placeholder`.
+
 Note además que el módulo audita la página **con errores de validación visibles**, no solo la página feliz. Los estados de error son el punto ciego clásico de las auditorías.
+
+### Módulo 3B — Ver a la herramienta fallar ([`modulo3b-defectos-sembrados.spec.js`](playwright/tests/modulo3b-defectos-sembrados.spec.js))
+
+El módulo 3 sale verde. Como resultado está bien; como aprendizaje es pésimo, porque usted nunca ve un informe de axe con violaciones dentro ni aprende a leerlo.
+
+Por eso existe **[`/defectuosa.html`](registraduria/src/main/resources/static/defectuosa.html)**: la misma pantalla con **17 defectos puestos a mano**, cada uno marcado en el código con un comentario. Ábrala en el navegador junto a la página correcta y compárelas.
+
+```bash
+npm run test:a11y:defectos
+```
+
+Lo que enseña este módulo no es que axe encuentre defectos. Es que **los defectos no se reparten en dos montones sino en tres**, y que la frontera entre los dos primeros la decide usted:
+
+| Grupo | Qué son | Cuántos | Cómo aparecen |
+|---|---|---|---|
+| **A** | axe los reporta con `.withTags([...wcag...])` | 6 reglas | `button-name`, `color-contrast`, `html-has-lang`, `image-alt`, `link-name`, `select-name` |
+| **B** | axe los reporta **solo si quita ese filtro** | 4 reglas | `heading-order`, `landmark-one-main`, `region`, `tabindex` |
+| **C** | axe **no** los reporta nunca | 7 defectos | revisión manual |
+
+> 🔍 **El grupo B es el hallazgo incómodo.** Casi todos los tutoriales copian `.withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa'])` sin decir que ese filtro silencia la categoría `best-practice` de axe — donde viven el orden de encabezados, la ausencia de `<main>` y los `tabindex` positivos. Son cuatro defectos reales que desaparecen del informe por una línea de configuración. La prueba 02 del módulo corre la misma página dos veces, con y sin filtro, para que vea la diferencia.
+
+**Los 7 defectos del grupo C** (búsquelos usted, están en la lista de entregables):
+
+1. `placeholder` usado como única etiqueta — desaparece al escribir.
+2. `alt="imagen"` — el atributo existe pero no describe nada.
+3. `outline: none` — el foco de teclado se vuelve invisible.
+4. Una casilla rotulada `Estado`, que no dice qué significa marcarla.
+5. El resultado se muestra sin `role="status"`: nunca se anuncia.
+6. Un enlace que dice `Haga clic aquí`.
+7. Un mensaje de error que dice `Error.` y nada más (WCAG 3.3.3 pide una sugerencia).
+
+El más instructivo es el primero. **Medimos que axe lo aprueba**: el `placeholder` cuenta como nombre accesible en el cálculo de *accname*, así que la regla `label` da el campo por bueno. Lo único que axe dice sobre ese input es que tiene un `tabindex` positivo — ni una palabra sobre la etiqueta que falta.
+
+En cambio la comprobación escrita a mano del módulo 3 (prueba 05), que exige `<label for>` o `aria-label`, **sí lo encuentra**. Esa es la justificación concreta de por qué escribir aserciones propias no es redundante con pasar la herramienta.
+
+> ⚠️ Las tres listas del módulo se obtuvieron **ejecutando** axe sobre la página, no leyendo documentación. Si actualiza `@axe-core/playwright` y una regla cambia de categoría, estas pruebas fallan y le dicen exactamente qué se movió. Es intencional: así el material no envejece en silencio.
 
 ### Módulo 4 — Regresión visual ([`modulo4-visual.spec.js`](playwright/tests/modulo4-visual.spec.js))
 
@@ -184,7 +222,7 @@ El único módulo que **no se automatiza**, y por eso el que mejor explica qué 
 
 Cinco participantes, tareas planteadas como objetivos (no como instrucciones), medición de tasa de éxito de tarea y tiempo en tarea, y cuestionario **SUS** al final.
 
-La pregunta que cierra el taller: *¿qué problema encontraron los usuarios que ninguna de las 21 pruebas automatizadas podía detectar?*
+La pregunta que cierra el taller: *¿qué problema encontraron los usuarios que ninguna de las 27 pruebas automatizadas podía detectar?*
 
 ---
 
@@ -233,11 +271,13 @@ La pregunta que cierra el taller: *¿qué problema encontraron los usuarios que 
 - Localizadores por rol o texto visible; se penaliza el XPath absoluto.
 - Pruebas **independientes**: cada una debe pasar ejecutada sola y en cualquier orden.
 
-### 3) Accesibilidad (módulo 3)
+### 3) Accesibilidad (módulos 3 y 3B)
 
 - Auditoría con axe de al menos **3 estados** de la interfaz (inicial, con error, con resultado).
-- Cero violaciones de nivel AA, o justificación escrita de cada excepción.
-- **Análisis obligatorio en el Wiki**: elija **un** criterio WCAG que axe *no* pueda verificar, explique por qué, y verifíquelo a mano.
+- Cero violaciones de nivel AA en `index.html`, o justificación escrita de cada excepción.
+- **Auditoría de [`/defectuosa.html`](registraduria/src/main/resources/static/defectuosa.html)**, con el informe de axe pegado en el Wiki. Debe reportar, para cada regla encontrada, **qué persona queda excluida** por ese defecto. Un informe copiado sin interpretar no cuenta.
+- **Los 7 defectos del grupo C**: localícelos a mano (sin mirar los comentarios `[C-n]` del código hasta haber terminado) y explique, para cada uno, **por qué ninguna herramienta puede detectarlo**.
+- **Análisis obligatorio en el Wiki**: ejecute axe sobre `defectuosa.html` **con y sin** el filtro `.withTags()`, y explique la diferencia. ¿Cuál de las 4 reglas que el filtro esconde le parece más grave, y por qué?
 
 ### 4) Regresión visual (módulo 4)
 
@@ -278,7 +318,7 @@ La pregunta que cierra el taller: *¿qué problema encontraron los usuarios que 
 | **Pruebas E2E** **(vale por 2)** | Cobertura de las reglas de negocio desde la UI. | 8+ escenarios, todos independientes y estables. | 6–7 escenarios correctos. | Menos de 6, o alguno inestable. | Escenarios que no verifican nada. | No hay pruebas E2E. |
 | **Calidad de los localizadores y esperas** | Estabilidad frente a cambios. | Localizadores por rol o texto; ninguna espera fija. | Alguna inconsistencia menor. | Mezcla de estrategias; alguna espera fija. | XPath absolutos o `sleep` generalizado. | Pruebas frágiles o acopladas al DOM. |
 | **Page Object Model** | Separación entre qué se prueba y cómo se interactúa. | POM completo; ninguna prueba con localizadores. | POM con pequeñas fugas. | POM parcial. | Clases sin responsabilidad clara. | No aplica POM. |
-| **Accesibilidad (axe / WCAG)** **(vale por 2)** | Auditoría y análisis crítico. | 3+ estados auditados, cero violaciones AA y análisis de un criterio no automatizable. | Auditoría completa, análisis superficial. | Solo la página inicial auditada. | Ejecuta axe sin interpretar. | No audita accesibilidad. |
+| **Accesibilidad (axe / WCAG)** **(vale por 2)** | Auditoría y análisis crítico. | 3+ estados auditados, cero violaciones AA, informe de `defectuosa.html` interpretado y los 7 defectos del grupo C localizados a mano. | Auditoría completa; encuentra parte del grupo C o lo analiza en superficie. | Solo la página inicial auditada. | Ejecuta axe sin interpretar. | No audita accesibilidad. |
 | **Regresión visual** | Detección de cambios no intencionales. | 3+ referencias, una móvil, con evidencia de una regresión detectada. | Referencias correctas sin evidencia de regresión. | 1–2 referencias. | Referencias actualizadas sin revisar el diff. | No aplica regresión visual. |
 | **Usabilidad con usuarios** **(vale por 2)** | Sesión, métricas e interpretación. | 5 participantes, métricas por tarea, SUS interpretado y 3 problemas con severidad. | Sesión completa, análisis parcial. | Menos de 5 participantes o sin SUS. | Solo opiniones, sin métricas. | No realiza sesión. |
 | **Gestión de defectos** | Registro y trazabilidad. | 2+ defectos bien documentados, uno de usabilidad. | Defectos presentes con detalle parcial. | Registro superficial. | Mención sin evidencia. | No entrega `defectos.md`. |
