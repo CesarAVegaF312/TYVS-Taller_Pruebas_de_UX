@@ -1,0 +1,30 @@
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+
+# Node
+node_modules/
+
+# Playwright
+# Sin barra inicial ni interna, para que apliquen a cualquier profundidad.
+# (Un patron como "playwright/test-results/" solo cubriria esa ruta exacta;
+# si manana la carpeta se anida un nivel mas, dejaria de aplicar.)
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
+# Las capturas de referencia SI se versionan: son la linea base contra la que
+# se compara. Lo que no se versiona es el resultado de cada corrida.
+!**/*-snapshots/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

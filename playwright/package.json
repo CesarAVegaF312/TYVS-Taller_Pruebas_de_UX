@@ -1,0 +1,20 @@
+{
+  "name": "tyvs-taller-ui-ux",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pruebas de UI (E2E), accesibilidad y regresion visual sobre la Registraduria",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:e2e": "playwright test tests/modulo1-e2e.spec.js tests/modulo2-pom.spec.js",
+    "test:a11y": "playwright test tests/modulo3-accesibilidad.spec.js",
+    "test:visual": "playwright test tests/modulo4-visual.spec.js",
+    "visual:update": "playwright test tests/modulo4-visual.spec.js --update-snapshots",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.49.1"
+  }
+}
