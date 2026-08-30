@@ -143,4 +143,42 @@ test.describe('Módulo 1 — Inscripción de votantes', () => {
       page.getByRole('heading', { name: 'Inscripción exitosa' })
     ).toBeVisible();
   });
+
+  test('09 - La regla de edad imposible vive en DOS capas, y hay que probar las dos', async ({ page, request }) => {
+    // Este es el caso que más se escapa en una suite E2E, y merece leerse
+    // entero antes de copiarlo.
+    //
+    // El dominio distingue una edad IMPOSIBLE (menor que 0 o mayor que 120,
+    // que devuelve INVALID_AGE) de una edad de MENOR (0 a 17, que devuelve
+    // UNDERAGE). Son dos clases de equivalencia distintas.
+    //
+    // Pero el navegador aplica la MISMA regla antes de enviar. Consecuencia:
+    // por la interfaz es imposible provocar un INVALID_AGE. Si solo se prueba
+    // por la UI, se concluiría que la regla del servidor no existe o no hace
+    // falta — y las dos conclusiones son falsas.
+
+    // Capa 1 — el navegador detiene el caso y NO llama al servicio.
+    let huboLlamada = false;
+    page.on('request', (r) => {
+      if (r.url().includes('/register') && r.method() === 'POST') huboLlamada = true;
+    });
+
+    await page.getByLabel('Nombre completo').fill('Edad Imposible');
+    await page.getByLabel('Número de documento').fill(String((Date.now() % 1000000) + 9));
+    await page.getByLabel('Edad').fill('150');
+    await page.getByRole('button', { name: 'Registrar votante' }).click();
+
+    await expect(page.getByText('La edad debe estar entre 0 y 120.')).toBeVisible();
+    expect(huboLlamada, 'El navegador no debería haber llamado al servicio').toBe(false);
+
+    // Capa 2 — la API sí es alcanzable sin pasar por el formulario, y ahí la
+    // regla del servidor es lo único que protege el dato. Es exactamente lo
+    // que hace el taller de pruebas de carga: golpear /register directamente.
+    const respuesta = await request.post('/register', {
+      data: { name: 'Edad Imposible', id: (Date.now() % 1000000) + 10, age: 150, gender: 'MALE', alive: true },
+    });
+
+    expect(respuesta.status()).toBe(200);
+    expect((await respuesta.text()).trim()).toBe('INVALID_AGE');
+  });
 });

@@ -126,7 +126,13 @@ mvn test -Dheadless=true      # sin interfaz gráfica, como en CI
 
 ### Módulo 1 — Pruebas E2E ([`modulo1-e2e.spec.js`](playwright/tests/modulo1-e2e.spec.js))
 
-Automatización básica del navegador: completar el formulario, enviarlo, verificar el resultado. Ocho escenarios que cubren las reglas de negocio desde la interfaz.
+Automatización básica del navegador: completar el formulario, enviarlo, verificar el resultado. Nueve escenarios que cubren las reglas de negocio desde la interfaz.
+
+> 🔍 **La prueba 09 es la que más enseña, y no es sobre el navegador.** El dominio distingue una edad **imposible** (`INVALID_AGE`, menor que 0 o mayor que 120) de una edad de **menor** (`UNDERAGE`, de 0 a 17). Pero el formulario aplica la misma regla antes de enviar, así que **por la interfaz es imposible provocar un `INVALID_AGE`**.
+>
+> Si usted solo prueba por la UI, concluye que esa regla del servidor no existe o que sobra. Las dos conclusiones son falsas: la API se puede llamar sin pasar por el formulario, y de hecho el taller de pruebas de carga hace exactamente eso. La prueba verifica **las dos capas** — que el navegador detiene el caso sin llamar al servicio, y que la API responde `INVALID_AGE` cuando se la invoca directamente.
+>
+> La lección general: una suite E2E mide lo que se puede alcanzar *a través de la interfaz*, y eso **no** es lo mismo que lo que el sistema hace. Toda validación duplicada en cliente y servidor tiene este punto ciego.
 
 Dos principios que se aplican en todo el archivo:
 
@@ -222,7 +228,7 @@ El único módulo que **no se automatiza**, y por eso el que mejor explica qué 
 
 Cinco participantes, tareas planteadas como objetivos (no como instrucciones), medición de tasa de éxito de tarea y tiempo en tarea, y cuestionario **SUS** al final.
 
-La pregunta que cierra el taller: *¿qué problema encontraron los usuarios que ninguna de las 27 pruebas automatizadas podía detectar?*
+La pregunta que cierra el taller: *¿qué problema encontraron los usuarios que ninguna de las 28 pruebas automatizadas podía detectar?*
 
 ---
 
@@ -265,7 +271,7 @@ La pregunta que cierra el taller: *¿qué problema encontraron los usuarios que 
 
 ### 2) Pruebas E2E (módulos 1 y 2)
 
-- Al menos **8 escenarios** cubriendo las reglas de negocio desde la interfaz.
+- Al menos **8 escenarios** cubriendo las reglas de negocio desde la interfaz, **más uno que verifique una regla que la interfaz no deja alcanzar** (ver prueba 09).
 - Page Object Model aplicado: ninguna prueba contiene un localizador directo.
 - **Cero** esperas fijas (`sleep`, `waitForTimeout(n)`).
 - Localizadores por rol o texto visible; se penaliza el XPath absoluto.
