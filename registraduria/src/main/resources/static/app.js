@@ -33,6 +33,21 @@ const MENSAJES = {
     detalle: 'Revise el número de documento: debe ser un número positivo.',
     clase: 'rechazo',
   },
+  // En condiciones normales este mensaje NO se muestra nunca: la función
+  // validar() de más abajo aplica la misma regla (0 a 120) antes de enviar,
+  // así que el navegador detiene el caso primero.
+  //
+  // Aun así se incluye, y no es código muerto. Si alguien cambia la validación
+  // del cliente, o el servidor endurece la regla —por ejemplo bajando la edad
+  // máxima a 115—, la interfaz responde con un mensaje útil en vez de con
+  // "El servicio respondió de forma inesperada". Manejar todos los resultados
+  // que el dominio puede devolver es más barato que descubrir el hueco en
+  // producción.
+  INVALID_AGE: {
+    titulo: 'Edad fuera de rango',
+    detalle: 'La edad debe estar entre 0 y 120 años. Verifique el dato capturado.',
+    clase: 'rechazo',
+  },
 };
 
 const form = document.getElementById('form-registro');
