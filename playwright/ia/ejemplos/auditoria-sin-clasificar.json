@@ -1,0 +1,86 @@
+{
+  "_aviso": "EJEMPLO FICTICIO escrito a mano para mostrar el formato y probar el evaluador. NO es la salida real de ninguna IA. Este archivo muestra la salida SIN clasificar, tal como la entrega la IA: sirve para probar npm run ia:sugerir.",
+  "ejemplo": true,
+  "herramienta": "ChatGPT",
+  "modelo": "(ejemplo)",
+  "ejecucion": 1,
+  "hallazgos": [
+    {
+      "elemento": "html",
+      "problema": "La etiqueta html no declara el atributo lang",
+      "criterio_wcag": "3.1.1",
+      "severidad": "media",
+      "evidencia": "<html>"
+    },
+    {
+      "elemento": ".ayuda",
+      "problema": "El texto de ayuda gris claro no alcanza el contraste minimo",
+      "criterio_wcag": "1.4.3",
+      "severidad": "alta",
+      "evidencia": "color: #adb5bd sobre blanco"
+    },
+    {
+      "elemento": "img (primera)",
+      "problema": "La primera imagen no tiene atributo alt",
+      "criterio_wcag": "1.1.1",
+      "severidad": "alta",
+      "evidencia": "<img src=\"logo.svg\" width=\"48\" height=\"48\">"
+    },
+    {
+      "elemento": "#d-btn-ayuda",
+      "problema": "Boton sin nombre accesible, solo muestra un icono",
+      "criterio_wcag": "4.1.2",
+      "severidad": "alta",
+      "evidencia": "<button type=\"button\" class=\"icono\" id=\"d-btn-ayuda\"></button>"
+    },
+    {
+      "elemento": "#d-link-ayuda",
+      "problema": "Enlace sin texto discernible",
+      "criterio_wcag": "2.4.4",
+      "severidad": "alta",
+      "evidencia": "<a href=\"/ayuda\" id=\"d-link-ayuda\">"
+    },
+    {
+      "elemento": "#d-genero",
+      "problema": "El select de genero no tiene etiqueta asociada",
+      "criterio_wcag": "4.1.2",
+      "severidad": "alta",
+      "evidencia": "<select id=\"d-genero\">"
+    },
+    {
+      "elemento": "#d-nombre",
+      "problema": "El campo nombre usa el placeholder como unica etiqueta",
+      "criterio_wcag": "3.3.2",
+      "severidad": "alta",
+      "evidencia": "placeholder=\"Nombre completo\" sin label"
+    },
+    {
+      "elemento": "img[alt=\"imagen\"]",
+      "problema": "El texto alternativo es generico y no describe la imagen",
+      "criterio_wcag": "1.1.1",
+      "severidad": "media",
+      "evidencia": "alt=\"imagen\""
+    },
+    {
+      "elemento": "a[href=\"/\"]",
+      "problema": "El enlace dice Haga clic aqui y no indica su destino",
+      "criterio_wcag": "2.4.4",
+      "severidad": "baja",
+      "evidencia": "Haga clic aquí"
+    },
+    {
+      "elemento": ".ayuda",
+      "problema": "El texto de ayuda gris claro no alcanza el contraste minimo",
+      "criterio_wcag": "1.4.3",
+      "severidad": "alta",
+      "evidencia": "color: #adb5bd sobre blanco"
+    },
+    {
+      "elemento": "#d-documento",
+      "problema": "El campo documento no tiene etiqueta",
+      "criterio_wcag": "1.3.1",
+      "severidad": "media",
+      "evidencia": ""
+    }
+  ]
+}

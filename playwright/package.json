@@ -12,7 +12,13 @@
     "test:a11y:defectos": "playwright test tests/modulo3b-defectos-sembrados.spec.js",
     "test:visual": "playwright test tests/modulo4-visual.spec.js",
     "visual:update": "playwright test tests/modulo4-visual.spec.js --update-snapshots",
-    "report": "playwright show-report"
+    "report": "playwright show-report",
+    "ia:preparar": "node ia/preparar-auditoria.js",
+    "ia:sugerir": "node ia/evaluar-auditoria.js --sugerir",
+    "ia:evaluar-auditoria": "node ia/evaluar-auditoria.js",
+    "ia:preparar-generacion": "node ia/preparar-generacion.js",
+    "ia:sabotaje": "node ia/sabotaje.js",
+    "ia:evaluar-plan": "node ia/evaluar-plan.js"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.1",

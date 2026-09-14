@@ -1,0 +1,130 @@
+{
+  "_aviso": "EJEMPLO FICTICIO escrito a mano para mostrar el formato y probar el evaluador. NO es la salida real de ningun agente.",
+  "ejemplo": true,
+  "herramienta": "Claude Code",
+  "modo": "caja-negra",
+  "ejecucion": 1,
+  "casos": [
+    {
+      "id": "C1",
+      "titulo": "Inscribe a una persona valida",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Ana",
+        "documento": 5001,
+        "edad": 30,
+        "vivo": true
+      },
+      "esperado": "Inscripción exitosa"
+    },
+    {
+      "id": "C2",
+      "titulo": "Rechaza a un menor de edad",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Luis",
+        "documento": 5002,
+        "edad": 17,
+        "vivo": true
+      },
+      "esperado": "Persona menor de edad"
+    },
+    {
+      "id": "C3",
+      "titulo": "Acepta exactamente 18 anios",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Eva",
+        "documento": 5003,
+        "edad": 18,
+        "vivo": true
+      },
+      "esperado": "Inscripción exitosa"
+    },
+    {
+      "id": "C4",
+      "titulo": "Rechaza a una persona fallecida",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Juan",
+        "documento": 0,
+        "edad": 40,
+        "vivo": false
+      },
+      "esperado": "Persona no viva"
+    },
+    {
+      "id": "C5",
+      "titulo": "Rechaza un documento repetido",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Rosa",
+        "documento": 5005,
+        "edad": 40,
+        "vivo": true,
+        "repetido": true
+      },
+      "esperado": "Documento ya inscrito"
+    },
+    {
+      "id": "C6",
+      "titulo": "No envia un documento negativo",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Nora",
+        "documento": -5,
+        "edad": 30,
+        "vivo": true
+      },
+      "esperado": "El documento debe ser un número mayor que cero."
+    },
+    {
+      "id": "C7",
+      "titulo": "Rechaza una edad imposible",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Max",
+        "documento": 5007,
+        "edad": 150,
+        "vivo": true
+      },
+      "esperado": "Edad fuera de rango"
+    },
+    {
+      "id": "C8",
+      "titulo": "Rechaza una edad negativa",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Leo",
+        "documento": 5008,
+        "edad": -1,
+        "vivo": true
+      },
+      "esperado": "Persona menor de edad"
+    },
+    {
+      "id": "C9",
+      "titulo": "Exige el nombre",
+      "via": "UI",
+      "entrada": {
+        "nombre": "",
+        "documento": 5009,
+        "edad": 30,
+        "vivo": true
+      },
+      "esperado": "Muestra un error"
+    },
+    {
+      "id": "C10",
+      "titulo": "Rechaza a un menor de edad (otra vez)",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Luis",
+        "documento": 5002,
+        "edad": 17,
+        "vivo": true
+      },
+      "esperado": "Persona menor de edad"
+    }
+  ]
+}

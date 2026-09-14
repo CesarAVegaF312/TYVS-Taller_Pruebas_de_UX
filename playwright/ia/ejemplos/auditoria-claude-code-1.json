@@ -1,0 +1,122 @@
+{
+  "_aviso": "EJEMPLO FICTICIO escrito a mano para mostrar el formato y probar el evaluador. NO es la salida real de ninguna IA.",
+  "ejemplo": true,
+  "herramienta": "Claude Code",
+  "modelo": "(ejemplo)",
+  "ejecucion": 1,
+  "hallazgos": [
+    {
+      "elemento": "html",
+      "problema": "La etiqueta html no declara el atributo lang",
+      "criterio_wcag": "3.1.1",
+      "severidad": "media",
+      "evidencia": "<html>",
+      "defecto": "A-1"
+    },
+    {
+      "elemento": ".ayuda",
+      "problema": "El texto de ayuda gris claro no alcanza el contraste minimo",
+      "criterio_wcag": "1.4.3",
+      "severidad": "alta",
+      "evidencia": "color: #adb5bd sobre blanco",
+      "defecto": "A-2"
+    },
+    {
+      "elemento": "footer p",
+      "problema": "El texto del pie tiene contraste insuficiente",
+      "criterio_wcag": "1.4.3",
+      "severidad": "media",
+      "evidencia": "color: #c2c9d0",
+      "defecto": "A-3"
+    },
+    {
+      "elemento": "img (primera)",
+      "problema": "La primera imagen no tiene atributo alt",
+      "criterio_wcag": "1.1.1",
+      "severidad": "alta",
+      "evidencia": "<img src=\"logo.svg\" width=\"48\" height=\"48\">",
+      "defecto": "A-4"
+    },
+    {
+      "elemento": "#d-btn-ayuda",
+      "problema": "Boton sin nombre accesible, solo muestra un icono",
+      "criterio_wcag": "4.1.2",
+      "severidad": "alta",
+      "evidencia": "<button type=\"button\" class=\"icono\" id=\"d-btn-ayuda\"></button>",
+      "defecto": "A-5"
+    },
+    {
+      "elemento": "#d-link-ayuda",
+      "problema": "Enlace sin texto discernible",
+      "criterio_wcag": "2.4.4",
+      "severidad": "alta",
+      "evidencia": "<a href=\"/ayuda\" id=\"d-link-ayuda\">",
+      "defecto": "A-6"
+    },
+    {
+      "elemento": "#d-genero",
+      "problema": "El select de genero no tiene etiqueta asociada",
+      "criterio_wcag": "4.1.2",
+      "severidad": "alta",
+      "evidencia": "<select id=\"d-genero\">",
+      "defecto": "A-7"
+    },
+    {
+      "elemento": "h4",
+      "problema": "Se salta del h1 al h4 en la jerarquia de encabezados",
+      "criterio_wcag": "1.3.1",
+      "severidad": "baja",
+      "evidencia": "<h4>Datos personales</h4>",
+      "defecto": "B-1"
+    },
+    {
+      "elemento": "#d-edad",
+      "problema": "Los tabindex positivos alteran el orden de tabulacion",
+      "criterio_wcag": "2.4.3",
+      "severidad": "media",
+      "evidencia": "tabindex=\"1\", tabindex=\"2\", tabindex=\"3\"",
+      "defecto": "B-3"
+    },
+    {
+      "elemento": "#d-nombre",
+      "problema": "El campo nombre usa el placeholder como unica etiqueta",
+      "criterio_wcag": "3.3.2",
+      "severidad": "alta",
+      "evidencia": "placeholder=\"Nombre completo\" sin label",
+      "defecto": "C-1"
+    },
+    {
+      "elemento": "input:focus",
+      "problema": "Se elimina el outline y el foco queda invisible",
+      "criterio_wcag": "2.4.7",
+      "severidad": "alta",
+      "evidencia": "outline: none",
+      "defecto": "C-3"
+    },
+    {
+      "elemento": "#resultado",
+      "problema": "El resultado no se anuncia: falta aria-live o role=status",
+      "criterio_wcag": "4.1.3",
+      "severidad": "alta",
+      "evidencia": "<div id=\"resultado\" hidden>",
+      "defecto": "C-5"
+    },
+    {
+      "elemento": "#d-error",
+      "problema": "El mensaje de error solo dice Error. y no sugiere como corregir",
+      "criterio_wcag": "3.3.3",
+      "severidad": "media",
+      "evidencia": "err.textContent = \"Error.\"",
+      "defecto": "C-7"
+    },
+    {
+      "elemento": "#d-vivo",
+      "problema": "La casilla no se puede activar con el teclado",
+      "criterio_wcag": "2.1.1",
+      "severidad": "media",
+      "evidencia": "",
+      "defecto": "NO_EXISTE",
+      "nota_estudiante": "Si se activa con la barra espaciadora; lo comprobe tabulando."
+    }
+  ]
+}
