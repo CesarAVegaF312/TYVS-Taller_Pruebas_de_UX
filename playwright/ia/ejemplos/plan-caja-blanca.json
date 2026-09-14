@@ -1,0 +1,191 @@
+{
+  "_aviso": "EJEMPLO FICTICIO escrito a mano para mostrar el formato y probar el evaluador. NO es la salida real de ningun agente.",
+  "ejemplo": true,
+  "herramienta": "Claude Code",
+  "modo": "caja-blanca",
+  "ejecucion": 1,
+  "casos": [
+    {
+      "id": "B1",
+      "titulo": "La API inscribe a una persona valida",
+      "via": "API",
+      "entrada": {
+        "nombre": "Ana",
+        "documento": 7001,
+        "edad": 30,
+        "vivo": true
+      },
+      "esperado": "VALID"
+    },
+    {
+      "id": "B2",
+      "titulo": "Rechaza a un menor por la interfaz",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Luis",
+        "documento": 7002,
+        "edad": 17,
+        "vivo": true
+      },
+      "esperado": "Persona menor de edad"
+    },
+    {
+      "id": "B3",
+      "titulo": "Frontera: 18 anios",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Eva",
+        "documento": 7003,
+        "edad": 18,
+        "vivo": true
+      },
+      "esperado": "Inscripción exitosa"
+    },
+    {
+      "id": "B4",
+      "titulo": "Frontera: edad 0 es menor, no imposible",
+      "via": "API",
+      "entrada": {
+        "nombre": "Bebe",
+        "documento": 7004,
+        "edad": 0,
+        "vivo": true
+      },
+      "esperado": "UNDERAGE"
+    },
+    {
+      "id": "B5",
+      "titulo": "Frontera: 120 es valido",
+      "via": "API",
+      "entrada": {
+        "nombre": "Abuela",
+        "documento": 7005,
+        "edad": 120,
+        "vivo": true
+      },
+      "esperado": "VALID"
+    },
+    {
+      "id": "B6",
+      "titulo": "Frontera: 121 es imposible",
+      "via": "API",
+      "entrada": {
+        "nombre": "Nadie",
+        "documento": 7006,
+        "edad": 121,
+        "vivo": true
+      },
+      "esperado": "INVALID_AGE"
+    },
+    {
+      "id": "B7",
+      "titulo": "Edad negativa por la API",
+      "via": "API",
+      "entrada": {
+        "nombre": "Nadie",
+        "documento": 7007,
+        "edad": -1,
+        "vivo": true
+      },
+      "esperado": "INVALID_AGE"
+    },
+    {
+      "id": "B8",
+      "titulo": "Documento 0 por la API",
+      "via": "API",
+      "entrada": {
+        "nombre": "Cero",
+        "documento": 0,
+        "edad": 30,
+        "vivo": true
+      },
+      "esperado": "INVALID"
+    },
+    {
+      "id": "B9",
+      "titulo": "Documento 1 es valido",
+      "via": "API",
+      "entrada": {
+        "nombre": "Uno",
+        "documento": 1,
+        "edad": 30,
+        "vivo": true
+      },
+      "esperado": "VALID"
+    },
+    {
+      "id": "B10",
+      "titulo": "Persona fallecida",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Pedro",
+        "documento": 7010,
+        "edad": 50,
+        "vivo": false
+      },
+      "esperado": "Persona no viva"
+    },
+    {
+      "id": "B11",
+      "titulo": "Documento repetido por la API",
+      "via": "API",
+      "entrada": {
+        "nombre": "Rosa",
+        "documento": 7011,
+        "edad": 40,
+        "vivo": true,
+        "repetido": true
+      },
+      "esperado": "DUPLICATED"
+    },
+    {
+      "id": "B12",
+      "titulo": "La API rechaza un nombre vacio",
+      "via": "API",
+      "entrada": {
+        "nombre": "",
+        "documento": 7012,
+        "edad": 30,
+        "vivo": true
+      },
+      "esperado": "INVALID"
+    },
+    {
+      "id": "B13",
+      "titulo": "Fallecida con edad imposible",
+      "via": "API",
+      "entrada": {
+        "nombre": "Rara",
+        "documento": 7013,
+        "edad": 150,
+        "vivo": false
+      },
+      "esperado": "INVALID_AGE"
+    },
+    {
+      "id": "B14",
+      "titulo": "El navegador bloquea la edad 150",
+      "via": "UI",
+      "entrada": {
+        "nombre": "Max",
+        "documento": 7014,
+        "edad": 150,
+        "vivo": true
+      },
+      "esperado": "La edad debe estar entre 0 y 120."
+    },
+    {
+      "id": "B15",
+      "titulo": "Genero desconocido por la API",
+      "via": "API",
+      "entrada": {
+        "nombre": "X",
+        "documento": 7015,
+        "edad": 30,
+        "vivo": true,
+        "genero": "OTRO"
+      },
+      "esperado": "HTTP 400"
+    }
+  ]
+}

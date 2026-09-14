@@ -20,6 +20,15 @@ blob-report/
 # se compara. Lo que no se versiona es el resultado de cada corrida.
 !**/*-snapshots/
 
+# Modulo 6 (probar con IA)
+# Los reportes son el resultado de cada corrida: se regeneran, no se versionan.
+# Con **/ porque un patron con barra interna solo aplicaria desde la raiz.
+**/ia/reportes/
+ia-resultados.json
+# init-agents de Playwright genera este archivo con comandos de SU sistema
+# operativo (en Windows, "cmd"): subirlo rompe el de sus companeros.
+.mcp.json
+
 # IDE
 .idea/
 .vscode/

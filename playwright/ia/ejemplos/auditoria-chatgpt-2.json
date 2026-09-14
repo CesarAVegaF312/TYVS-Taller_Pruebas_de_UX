@@ -1,0 +1,91 @@
+{
+  "_aviso": "EJEMPLO FICTICIO escrito a mano para mostrar el formato y probar el evaluador. NO es la salida real de ninguna IA.",
+  "ejemplo": true,
+  "herramienta": "ChatGPT",
+  "modelo": "(ejemplo)",
+  "ejecucion": 2,
+  "hallazgos": [
+    {
+      "elemento": "html",
+      "problema": "La etiqueta html no declara el atributo lang",
+      "criterio_wcag": "3.1.1",
+      "severidad": "media",
+      "evidencia": "<html>",
+      "defecto": "A-1"
+    },
+    {
+      "elemento": ".ayuda",
+      "problema": "El texto de ayuda gris claro no alcanza el contraste minimo",
+      "criterio_wcag": "1.4.3",
+      "severidad": "alta",
+      "evidencia": "color: #adb5bd sobre blanco",
+      "defecto": "A-2"
+    },
+    {
+      "elemento": "footer p",
+      "problema": "El texto del pie tiene contraste insuficiente",
+      "criterio_wcag": "1.4.3",
+      "severidad": "media",
+      "evidencia": "color: #c2c9d0",
+      "defecto": "A-3"
+    },
+    {
+      "elemento": "img (primera)",
+      "problema": "La primera imagen no tiene atributo alt",
+      "criterio_wcag": "1.1.1",
+      "severidad": "alta",
+      "evidencia": "<img src=\"logo.svg\" width=\"48\" height=\"48\">",
+      "defecto": "A-4"
+    },
+    {
+      "elemento": "#d-btn-ayuda",
+      "problema": "Boton sin nombre accesible, solo muestra un icono",
+      "criterio_wcag": "4.1.2",
+      "severidad": "alta",
+      "evidencia": "<button type=\"button\" class=\"icono\" id=\"d-btn-ayuda\"></button>",
+      "defecto": "A-5"
+    },
+    {
+      "elemento": "#d-genero",
+      "problema": "El select de genero no tiene etiqueta asociada",
+      "criterio_wcag": "4.1.2",
+      "severidad": "alta",
+      "evidencia": "<select id=\"d-genero\">",
+      "defecto": "A-7"
+    },
+    {
+      "elemento": "#d-nombre",
+      "problema": "El campo nombre usa el placeholder como unica etiqueta",
+      "criterio_wcag": "3.3.2",
+      "severidad": "alta",
+      "evidencia": "placeholder=\"Nombre completo\" sin label",
+      "defecto": "C-1"
+    },
+    {
+      "elemento": "#d-error",
+      "problema": "El mensaje de error solo dice Error. y no sugiere como corregir",
+      "criterio_wcag": "3.3.3",
+      "severidad": "media",
+      "evidencia": "err.textContent = \"Error.\"",
+      "defecto": "C-7"
+    },
+    {
+      "elemento": "button[type=submit]",
+      "problema": "El boton de envio no tiene texto",
+      "criterio_wcag": "4.1.2",
+      "severidad": "media",
+      "evidencia": "",
+      "defecto": "NO_EXISTE",
+      "nota_estudiante": "Dice Registrar votante."
+    },
+    {
+      "elemento": "form",
+      "problema": "El formulario no tiene atributo action",
+      "criterio_wcag": "3.2.2",
+      "severidad": "media",
+      "evidencia": "",
+      "defecto": "NO_EXISTE",
+      "nota_estudiante": "No es un requisito de accesibilidad: el envio lo maneja JavaScript."
+    }
+  ]
+}

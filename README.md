@@ -17,6 +17,7 @@ Una aplicación puede pasar todas las pruebas E2E del mundo y seguir siendo inus
 - Auditar accesibilidad **WCAG 2.1 AA** con axe, y entender qué parte del problema **no** se puede automatizar.
 - Detectar regresiones visuales que ninguna aserción sobre el DOM ve.
 - Diseñar y ejecutar una **sesión de usabilidad con usuarios reales**, midiendo tasa de éxito de tarea y **SUS**.
+- Evaluar con datos, y no con impresiones, **qué aporta una IA al probar software**: qué encuentra, qué se inventa y qué se le escapa (módulo 6, exploratorio).
 
 ---
 
@@ -49,11 +50,14 @@ Eso importa por tres razones:
 │   └─ src/main/resources/static/    # index.html (correcta), defectuosa.html (17 defectos)
 ├─ playwright/                       # pista principal
 │   ├─ pages/                        # Page Objects
-│   └─ tests/                        # módulos 1, 2, 3, 3B y 4
+│   ├─ tests/                        # módulos 1, 2, 3, 3B y 4
+│   └─ ia/                           # módulo 6: scripts que evalúan a la IA y generan los reportes
 ├─ selenium-java/                    # pista alternativa
 │   └─ src/test/java/
 ├─ docs/
 │   ├─ protocolo-pruebas-con-usuarios.md   # módulo 5
+│   ├─ modulo6-probar-con-ia.md            # módulo 6: guía de las dos sesiones
+│   ├─ prompts/                            # módulo 6: un prompt por experimento
 │   ├─ playwright-guide.md
 │   ├─ selenium-guide.md
 │   └─ cicd-guide.md
@@ -230,6 +234,32 @@ Cinco participantes, tareas planteadas como objetivos (no como instrucciones), m
 
 La pregunta que cierra el taller: *¿qué problema encontraron los usuarios que ninguna de las 28 pruebas automatizadas podía detectar?*
 
+### Módulo 6 — Probar con IA ([`docs/modulo6-probar-con-ia.md`](docs/modulo6-probar-con-ia.md))
+
+**Exploratorio: no suma puntos en la rúbrica.**
+
+Se usa **ChatGPT** y **Claude Code** para probar la Registraduría, y en vez de creerle a la IA, **se la evalúa**. Cada experimento termina en un reporte HTML generado por un script, que compara lo que hizo la IA contra una verdad conocida y explica cómo leer cada cifra.
+
+| Experimento | Pregunta | Qué se mide |
+|---|---|---|
+| **E1** | ¿Encuentra la IA los defectos de accesibilidad que axe no ve? | los 17 defectos de `defectuosa.html`, por grupo, y los hallazgos inventados |
+| **E2** | Las pruebas que escribe la IA, ¿detectan algo? | seis sabotajes introducidos a propósito en la aplicación |
+| **E3** | ¿Qué reglas descubre un agente explorando la aplicación? | clases de equivalencia y valores límite, contra un oráculo de las reglas |
+| **E4** | Si se repite el mismo prompt, ¿encuentra lo mismo? | qué hallazgos aparecen siempre y cuáles solo a veces |
+
+Se hace en **dos sesiones**, con una guía paso a paso y un prompt por experimento en [`docs/prompts/`](docs/prompts/).
+
+> **La trampa que el módulo enseña a evitar:** si la IA puede ver las respuestas, no las encuentra, las copia. `defectuosa.html` explica sus defectos en comentarios y las pruebas de los módulos 1 y 2 están en el repositorio. Por eso cada experimento prepara primero una carpeta **fuera del repositorio** con solo lo que la IA debe ver.
+
+¿Quiere ver cómo es un reporte antes de usar ninguna IA? Los ejemplos de `playwright/ia/ejemplos/` están escritos a mano para eso (y los reportes lo advierten):
+
+```bash
+cd playwright
+npm run ia:evaluar-auditoria -- ia/ejemplos/auditoria-chatgpt-1.json ia/ejemplos/auditoria-chatgpt-2.json ia/ejemplos/auditoria-chatgpt-3.json ia/ejemplos/auditoria-claude-code-1.json
+npm run ia:evaluar-plan -- ia/ejemplos/plan-caja-negra.json ia/ejemplos/plan-caja-blanca.json
+npm run ia:sabotaje -- --ejemplo    # necesita el jar compilado y los puertos 8080 y 8081 libres
+```
+
 ---
 
 ## Playwright o Selenium: ¿cuál hago?
@@ -313,6 +343,10 @@ La pregunta que cierra el taller: *¿qué problema encontraron los usuarios que 
 - ¿Qué problema encontraron los usuarios reales que ninguna prueba automatizada detectó?
 - ¿Qué encontró axe que usted no habría notado mirando la pantalla?
 - ¿Qué le costó más: escribir las pruebas o mantenerlas estables?
+
+### 9) Probar con IA (módulo 6, opcional y sin puntos)
+
+Si hace el módulo, agregue al Wiki una página *Probar con IA* con los cuatro reportes, las respuestas a las preguntas del final de cada uno y una recomendación en un párrafo: para qué usaría una IA al probar una aplicación como esta, para qué no, y qué verificación manual no se saltaría nunca. Ver la [guía del módulo](docs/modulo6-probar-con-ia.md#para-la-wiki-opcional).
 
 ---
 
