@@ -9,7 +9,7 @@ const AxeBuilder = require('@axe-core/playwright').default;
  * es pésimo como aprendizaje: usted nunca ve un reporte de axe con violaciones
  * dentro, nunca lee un helpUrl, y se queda con la idea de que "verde = listo".
  *
- * defectuosa.html es la misma pantalla con 16 defectos puestos a mano. Este
+ * defectuosa.html es la misma pantalla con 17 defectos puestos a mano. Este
  * módulo demuestra tres cosas, en orden de importancia creciente:
  *
  *   1. axe encuentra defectos reales y dice exactamente dónde están.
@@ -142,7 +142,7 @@ test.describe('Módulo 3B — La herramienta encontrando defectos', () => {
     await page.goto('/defectuosa.html');
 
     await page.locator('#d-nombre').fill('Ana Invisible');
-    await page.locator('#d-documento').fill(String((Date.now() % 900000) + 100000));
+    await page.locator('#d-documento').fill(String(Math.floor(Math.random() * 900_000_000) + 100_000));
     await page.locator('#d-edad').fill('30');
     await page.locator('#d-btn-registrar').click();
 

@@ -69,7 +69,7 @@ test.describe('Módulo 3 — Accesibilidad (WCAG 2.1 AA)', () => {
 
   test('03 - El resultado de la inscripción se anuncia a lectores de pantalla', async ({ page }) => {
     await page.goto('/');
-    const documento = (Date.now() % 1000000) + 7;
+    const documento = Math.floor(Math.random() * 900_000_000) + 100_000;
 
     await page.getByLabel('Nombre completo').fill('Ana Accesible');
     await page.getByLabel('Número de documento').fill(String(documento));

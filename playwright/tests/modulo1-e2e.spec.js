@@ -20,6 +20,19 @@ const { test, expect } = require('@playwright/test');
  *    la app responde rápido, insuficiente cuando responde lento.
  */
 
+/**
+ * Un documento distinto en cada llamada, para no chocar con la regla de
+ * duplicados, que es estado acumulado en el servidor.
+ *
+ * Antes se usaba Date.now() % 1000000 más un número distinto por prueba. Parece
+ * único y no lo es: al ejecutar la misma prueba varias veces en paralelo
+ * (--repeat-each, la forma estándar de cazar pruebas inestables), dos copias
+ * arrancan en el mismo milisegundo y sacan el mismo documento. Se midió: con
+ * --repeat-each=30 y 8 workers, una de cada 30 fallaba con "Documento ya
+ * inscrito".
+ */
+const documentoUnico = () => Math.floor(Math.random() * 900_000_000) + 100_000;
+
 test.describe('Módulo 1 — Inscripción de votantes', () => {
 
   test.beforeEach(async ({ page }) => {
@@ -44,7 +57,7 @@ test.describe('Módulo 1 — Inscripción de votantes', () => {
   test('03 - Registra a una persona válida', async ({ page }) => {
     // Arrange: un documento único por corrida evita chocar con la regla
     // de duplicados, que es estado acumulado en el servidor.
-    const documento = Date.now() % 1000000;
+    const documento = documentoUnico();
 
     // Act
     await page.getByLabel('Nombre completo').fill('Ana Martínez');
@@ -60,7 +73,7 @@ test.describe('Módulo 1 — Inscripción de votantes', () => {
   });
 
   test('04 - Rechaza a una persona menor de edad', async ({ page }) => {
-    const documento = (Date.now() % 1000000) + 1;
+    const documento = documentoUnico();
 
     await page.getByLabel('Nombre completo').fill('Sara Gómez');
     await page.getByLabel('Número de documento').fill(String(documento));
@@ -74,7 +87,7 @@ test.describe('Módulo 1 — Inscripción de votantes', () => {
   });
 
   test('05 - Rechaza a una persona no viva', async ({ page }) => {
-    const documento = (Date.now() % 1000000) + 2;
+    const documento = documentoUnico();
 
     await page.getByLabel('Nombre completo').fill('Pedro Ruiz');
     await page.getByLabel('Número de documento').fill(String(documento));
@@ -89,7 +102,7 @@ test.describe('Módulo 1 — Inscripción de votantes', () => {
   });
 
   test('06 - Rechaza un documento ya inscrito', async ({ page }) => {
-    const documento = (Date.now() % 1000000) + 3;
+    const documento = documentoUnico();
 
     // Arrange: primera inscripción, que debe salir bien
     await page.getByLabel('Nombre completo').fill('Luis Torres');
@@ -126,7 +139,7 @@ test.describe('Módulo 1 — Inscripción de votantes', () => {
     // Operable por teclado es un requisito de WCAG 2.1.1, y también la forma
     // en que trabaja mucha gente. Si esta prueba falla, hay un problema real
     // de accesibilidad, no un detalle estético.
-    const documento = (Date.now() % 1000000) + 4;
+    const documento = documentoUnico();
 
     await page.getByLabel('Nombre completo').focus();
     await page.keyboard.type('Teclado Puro');
@@ -164,7 +177,7 @@ test.describe('Módulo 1 — Inscripción de votantes', () => {
     });
 
     await page.getByLabel('Nombre completo').fill('Edad Imposible');
-    await page.getByLabel('Número de documento').fill(String((Date.now() % 1000000) + 9));
+    await page.getByLabel('Número de documento').fill(String(documentoUnico()));
     await page.getByLabel('Edad').fill('150');
     await page.getByRole('button', { name: 'Registrar votante' }).click();
 
@@ -175,7 +188,7 @@ test.describe('Módulo 1 — Inscripción de votantes', () => {
     // regla del servidor es lo único que protege el dato. Es exactamente lo
     // que hace el taller de pruebas de carga: golpear /register directamente.
     const respuesta = await request.post('/register', {
-      data: { name: 'Edad Imposible', id: (Date.now() % 1000000) + 10, age: 150, gender: 'MALE', alive: true },
+      data: { name: 'Edad Imposible', id: documentoUnico(), age: 150, gender: 'MALE', alive: true },
     });
 
     expect(respuesta.status()).toBe(200);
