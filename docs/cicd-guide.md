@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 ```
 
-> ⚠️ Note el filtro `branches`. El flujo **solo** se dispara en `main`, `master` y `develop`. Si usted trabaja en una rama `feature/...`, no verá ninguna ejecución hasta abrir el pull request. No es un fallo: es la configuración.
+> Note el filtro `branches`. El flujo **solo** se dispara en `main`, `master` y `develop`. Si usted trabaja en una rama `feature/...`, no verá ninguna ejecución hasta abrir el pull request. No es un fallo: es la configuración.
 
 ## Los tres detalles que suelen romper un CI de pruebas de UI
 

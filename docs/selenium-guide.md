@@ -14,7 +14,7 @@ A diferencia de versiones anteriores de este taller, no depende de ningún sitio
 | Maven | 3.8+ |
 | Chrome | reciente |
 
-> 📌 **No hace falta descargar ChromeDriver.** Desde Selenium **4.6**, *Selenium Manager* viene incluido y resuelve el driver automáticamente. Versiones anteriores de este taller usaban la librería WebDriverManager para eso; ya es redundante y se eliminó.
+> **No hace falta descargar ChromeDriver.** Desde Selenium **4.6**, *Selenium Manager* viene incluido y resuelve el driver automáticamente. Versiones anteriores de este taller usaban la librería WebDriverManager para eso; ya es redundante y se eliminó.
 
 ---
 

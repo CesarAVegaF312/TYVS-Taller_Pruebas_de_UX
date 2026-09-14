@@ -1,4 +1,4 @@
-# 🚀 Instrucciones para subir el taller a GitHub
+# Instrucciones para subir el taller a GitHub
 
 ## Paso 1 — Crear el repositorio en GitHub
 
@@ -28,7 +28,7 @@ git push -u origin main
 
 > Reemplaza `TU_USUARIO` con tu nombre de usuario de GitHub.
 
-## ✅ Verificar que todo funcionó
+## Verificar que todo funcionó
 
 Después del push:
 
@@ -36,7 +36,7 @@ Después del push:
 2. Verás el workflow `pruebas-ui`, con sus dos trabajos: `Playwright (E2E + accesibilidad)` y `Selenium (UI)`
 3. Se ejecutarán automáticamente en el siguiente push
 
-## 📌 Tip: Agregar badge de estado al README
+## Tip: Agregar badge de estado al README
 
 Copia esto en tu README.md (reemplaza `TU_USUARIO` y `REPO`):
 

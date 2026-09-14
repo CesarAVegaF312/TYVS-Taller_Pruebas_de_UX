@@ -49,13 +49,13 @@ Orden de preferencia:
 5. **CSS / XPath** — último recurso.
 
 ```js
-// ✅ Sobrevive a un rediseño
+// Bien: sobrevive a un rediseño
 page.getByRole('button', { name: 'Registrar votante' })
 
-// ❌ Se rompe con el primer cambio de estilos
+// Mal: se rompe con el primer cambio de estilos
 page.locator('.btn.btn-primary.mt-3')
 
-// ❌❌ Se rompe si alguien inserta un div
+// Peor: se rompe si alguien inserta un div
 page.locator('/html/body/div[2]/form/button')
 ```
 

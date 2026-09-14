@@ -1,6 +1,6 @@
 # Registro de Defectos — EJEMPLO DEL PROFESOR
 
-> ℹ️ **Este archivo es un ejemplo**, no su entrega. Muestra el nivel de detalle
+> **Este archivo es un ejemplo**, no su entrega. Muestra el nivel de detalle
 > esperado y, sobre todo, la diferencia entre un defecto funcional y uno de
 > usabilidad. Para su taller parta de [`defectos_template.md`](defectos_template.md).
 
@@ -23,7 +23,7 @@
 - **Cambio propuesto**: aceptar el formato con puntos y normalizarlo, o mostrar el formato esperado como texto de ayuda visible desde el inicio.
 - **Estado**: Abierto
 
-> 📌 Este defecto **no lo detecta ninguna prueba automatizada**: la validación funciona exactamente como fue programada. El problema es que la interfaz espera un formato que la persona no adivina. Solo aparece observando a alguien usarla.
+> Este defecto **no lo detecta ninguna prueba automatizada**: la validación funciona exactamente como fue programada. El problema es que la interfaz espera un formato que la persona no adivina. Solo aparece observando a alguien usarla.
 
 ---
 
@@ -43,7 +43,7 @@
 - **Cambio propuesto**: mover el foco al encabezado del resultado tras una inscripción exitosa.
 - **Estado**: Abierto
 
-> 📌 **axe no reporta este defecto**, y ese es justo el punto del Módulo 3. La página tiene `aria-live` correctamente puesto, así que para la herramienta está bien. Que el orden del foco sea *lógico* es un juicio humano.
+> **axe no reporta este defecto**, y ese es justo el punto del Módulo 3. La página tiene `aria-live` correctamente puesto, así que para la herramienta está bien. Que el orden del foco sea *lógico* es un juicio humano.
 
 ---
 
