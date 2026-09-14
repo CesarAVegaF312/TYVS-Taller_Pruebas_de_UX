@@ -53,9 +53,17 @@ class RegistroPage {
     await expect(this.page.getByRole('heading', { name: titulo })).toBeVisible();
   }
 
-  /** Genera un documento distinto en cada llamada. */
+  /**
+   * Genera un documento distinto en cada llamada.
+   *
+   * El rango es grande a proposito. Con 900.000 valores posibles, la
+   * probabilidad de que dos pruebas saquen el mismo numero crece mucho mas
+   * rapido de lo que parece (la paradoja del cumpleanos), y un choque produce
+   * DUPLICATED y una prueba que falla sin motivo. Por arriba, el limite es el
+   * int de Java del servidor (2.147.483.647).
+   */
   static documentoUnico() {
-    return Math.floor(Math.random() * 900000) + 100000;
+    return Math.floor(Math.random() * 900_000_000) + 100_000;
   }
 }
 
