@@ -9,7 +9,7 @@ Una aplicación puede pasar todas las pruebas E2E del mundo y seguir siendo inus
 
 ---
 
-## 🎯 Objetivos
+## Objetivos
 
 - Automatizar pruebas de interfaz con **Playwright** y con **Selenium**, y saber cuándo conviene cada una.
 - Aplicar el patrón **Page Object Model** para que las pruebas sobrevivan a los rediseños.
@@ -20,7 +20,7 @@ Una aplicación puede pasar todas las pruebas E2E del mundo y seguir siendo inus
 
 ---
 
-## 📑 Índice
+## Índice
 
 - [Sistema bajo prueba](#sistema-bajo-prueba)
 - [Prerrequisitos](#prerrequisitos)
@@ -72,7 +72,7 @@ Eso importa por tres razones:
 | Node.js | 18 o superior | ejecutar Playwright |
 | Chrome | reciente | pista de Selenium |
 
-> 📌 **No hace falta descargar ChromeDriver a mano.** Selenium 4.6 en adelante incluye *Selenium Manager*, que resuelve el driver automáticamente. (Versiones anteriores de este taller usaban WebDriverManager para eso; ya es innecesario.)
+> **No hace falta descargar ChromeDriver a mano.** Selenium 4.6 en adelante incluye *Selenium Manager*, que resuelve el driver automáticamente. (Versiones anteriores de este taller usaban WebDriverManager para eso; ya es innecesario.)
 
 ---
 
@@ -118,7 +118,7 @@ mvn test                      # con navegador visible
 mvn test -Dheadless=true      # sin interfaz gráfica, como en CI
 ```
 
-> 💡 La configuración de Playwright incluye un bloque `webServer` que arranca la Registraduría automáticamente y la apaga al terminar. Selenium no hace eso: hay que levantarla antes. Es una diferencia real entre las dos herramientas y conviene notarla.
+> La configuración de Playwright incluye un bloque `webServer` que arranca la Registraduría automáticamente y la apaga al terminar. Selenium no hace eso: hay que levantarla antes. Es una diferencia real entre las dos herramientas y conviene notarla.
 
 ---
 
@@ -128,7 +128,7 @@ mvn test -Dheadless=true      # sin interfaz gráfica, como en CI
 
 Automatización básica del navegador: completar el formulario, enviarlo, verificar el resultado. Nueve escenarios que cubren las reglas de negocio desde la interfaz.
 
-> 🔍 **La prueba 09 es la que más enseña, y no es sobre el navegador.** El dominio distingue una edad **imposible** (`INVALID_AGE`, menor que 0 o mayor que 120) de una edad de **menor** (`UNDERAGE`, de 0 a 17). Pero el formulario aplica la misma regla antes de enviar, así que **por la interfaz es imposible provocar un `INVALID_AGE`**.
+> **La prueba 09 es la que más enseña, y no es sobre el navegador.** El dominio distingue una edad **imposible** (`INVALID_AGE`, menor que 0 o mayor que 120) de una edad de **menor** (`UNDERAGE`, de 0 a 17). Pero el formulario aplica la misma regla antes de enviar, así que **por la interfaz es imposible provocar un `INVALID_AGE`**.
 >
 > Si usted solo prueba por la UI, concluye que esa regla del servidor no existe o que sobra. Las dos conclusiones son falsas: la API se puede llamar sin pasar por el formulario, y de hecho el taller de pruebas de carga hace exactamente eso. La prueba verifica **las dos capas** — que el navegador detiene el caso sin llamar al servicio, y que la API responde `INVALID_AGE` cuando se la invoca directamente.
 >
@@ -139,10 +139,10 @@ Dos principios que se aplican en todo el archivo:
 **Localizadores por rol y texto visible, no por CSS ni XPath.**
 
 ```js
-// ✅ Sobrevive a un rediseño, y de paso comprueba que el elemento es accesible
+// Bien: sobrevive a un rediseño, y de paso comprueba que el elemento es accesible
 page.getByRole('button', { name: 'Registrar votante' })
 
-// ❌ Se rompe con el primer cambio de estilos
+// Mal: se rompe con el primer cambio de estilos
 page.locator('.btn.btn-primary.mt-3')
 ```
 
@@ -165,7 +165,7 @@ Aquí empieza la parte de UX. Auditoría automatizada de **WCAG 2.1 AA** con `ax
 
 Contexto: la accesibilidad dejó de ser opcional. El **European Accessibility Act** es exigible desde junio de 2025, y en Estados Unidos la ADA genera litigio constante sobre sitios web.
 
-> ⚠️ **El límite de axe es lo más valioso de este módulo.** axe detecta de forma fiable cerca del **40%** de los problemas WCAG: los mecánicos (contraste insuficiente, `<img>` sin `alt`, botones y enlaces sin nombre accesible). El resto exige juicio humano: ¿el texto alternativo *describe* la imagen o solo dice "imagen"? ¿el orden de tabulación sigue el orden lógico de la tarea?
+> **El límite de axe es lo más valioso de este módulo.** axe detecta de forma fiable cerca del **40%** de los problemas WCAG: los mecánicos (contraste insuficiente, `<img>` sin `alt`, botones y enlaces sin nombre accesible). El resto exige juicio humano: ¿el texto alternativo *describe* la imagen o solo dice "imagen"? ¿el orden de tabulación sigue el orden lógico de la tarea?
 >
 > **Una suite de axe en verde no significa "el sitio es accesible".** Significa "no tiene los errores que una máquina puede detectar sola".
 
@@ -191,7 +191,7 @@ Lo que enseña este módulo no es que axe encuentre defectos. Es que **los defec
 | **B** | axe los reporta **solo si quita ese filtro** | 4 reglas | `heading-order`, `landmark-one-main`, `region`, `tabindex` |
 | **C** | axe **no** los reporta nunca | 7 defectos | revisión manual |
 
-> 🔍 **El grupo B es el hallazgo incómodo.** Casi todos los tutoriales copian `.withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa'])` sin decir que ese filtro silencia la categoría `best-practice` de axe — donde viven el orden de encabezados, la ausencia de `<main>` y los `tabindex` positivos. Son cuatro defectos reales que desaparecen del informe por una línea de configuración. La prueba 02 del módulo corre la misma página dos veces, con y sin filtro, para que vea la diferencia.
+> **El grupo B es el hallazgo incómodo.** Casi todos los tutoriales copian `.withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa'])` sin decir que ese filtro silencia la categoría `best-practice` de axe — donde viven el orden de encabezados, la ausencia de `<main>` y los `tabindex` positivos. Son cuatro defectos reales que desaparecen del informe por una línea de configuración. La prueba 02 del módulo corre la misma página dos veces, con y sin filtro, para que vea la diferencia.
 
 **Los 7 defectos del grupo C** (búsquelos usted, están en la lista de entregables):
 
@@ -207,7 +207,7 @@ El más instructivo es el primero. **Medimos que axe lo aprueba**: el `placehold
 
 En cambio la comprobación escrita a mano del módulo 3 (prueba 05), que exige `<label for>` o `aria-label`, **sí lo encuentra**. Esa es la justificación concreta de por qué escribir aserciones propias no es redundante con pasar la herramienta.
 
-> ⚠️ Las tres listas del módulo se obtuvieron **ejecutando** axe sobre la página, no leyendo documentación. Si actualiza `@axe-core/playwright` y una regla cambia de categoría, estas pruebas fallan y le dicen exactamente qué se movió. Es intencional: así el material no envejece en silencio.
+> Las tres listas del módulo se obtuvieron **ejecutando** axe sobre la página, no leyendo documentación. Si actualiza `@axe-core/playwright` y una regla cambia de categoría, estas pruebas fallan y le dicen exactamente qué se movió. Es intencional: así el material no envejece en silencio.
 
 ### Módulo 4 — Regresión visual ([`modulo4-visual.spec.js`](playwright/tests/modulo4-visual.spec.js))
 
@@ -218,7 +218,7 @@ npm run test:visual        # comparar contra las referencias
 npm run visual:update      # actualizar las referencias
 ```
 
-> ⚠️ **El riesgo del patrón**: es cómodo actualizar las referencias sin mirar el diff, y ahí la prueba deja de proteger. Revise **siempre** la imagen de diferencias antes de aceptar una actualización.
+> **El riesgo del patrón**: es cómodo actualizar las referencias sin mirar el diff, y ahí la prueba deja de proteger. Revise **siempre** la imagen de diferencias antes de aceptar una actualización.
 >
 > Las capturas dependen del sistema operativo y de las fuentes instaladas, así que una referencia generada en Windows no coincide con la de un runner Linux. Por eso el flujo de CI de este taller **no** ejecuta el módulo 4; en un proyecto real se generarían dentro del contenedor oficial de Playwright.
 
@@ -247,7 +247,7 @@ La pregunta que cierra el taller: *¿qué problema encontraron los usuarios que 
 
 **Recomendación**: haga la pista de **Playwright completa** (módulos 1 a 4) y la de **Selenium** solo para el módulo 2, de modo que pueda comparar el mismo Page Object en las dos herramientas. Sabrá defender una elección en una entrevista y reconocerá el patrón en cualquier código heredado.
 
-> 📌 Versiones anteriores de este taller usaban Cypress. Se migró a Playwright porque soporta múltiples navegadores reales, no tiene las restricciones de mismo-origen de Cypress, trae regresión visual y accesibilidad de fábrica, y hoy tiene más tracción en la industria.
+> Versiones anteriores de este taller usaban Cypress. Se migró a Playwright porque soporta múltiples navegadores reales, no tiene las restricciones de mismo-origen de Cypress, trae regresión visual y accesibilidad de fábrica, y hoy tiene más tracción en la industria.
 
 ---
 
@@ -260,7 +260,7 @@ La pregunta que cierra el taller: *¿qué problema encontraron los usuarios que 
 - Integrantes en `integrantes.txt` o en el README.
 - **Rama principal ejecutable**: `npm test` en verde sin pasos manuales.
 
-> ⚠️ Verifique que el código quedó realmente versionado antes de entregar:
+> Verifique que el código quedó realmente versionado antes de entregar:
 >
 > ```bash
 > git ls-files            # deben aparecer sus specs y páginas

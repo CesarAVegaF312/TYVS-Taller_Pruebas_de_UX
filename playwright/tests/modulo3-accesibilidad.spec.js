@@ -15,7 +15,7 @@ const AxeBuilder = require('@axe-core/playwright').default;
  * Accessibility Act es exigible desde junio de 2025, y en Estados Unidos la
  * ADA genera litigio constante sobre sitios web.
  *
- * ⚠️ LÍMITE IMPORTANTE, y es lo más valioso de este módulo:
+ * LÍMITE IMPORTANTE, y es lo más valioso de este módulo:
  * axe detecta de forma fiable alrededor del 40% de los problemas WCAG. Son
  * los mecánicos: contraste insuficiente, imágenes sin texto alternativo,
  * botones y enlaces sin nombre accesible.

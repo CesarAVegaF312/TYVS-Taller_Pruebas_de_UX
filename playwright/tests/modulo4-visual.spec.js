@@ -20,7 +20,7 @@ const { test, expect } = require('@playwright/test');
  *
  *     npm run visual:update
  *
- * ⚠️ El riesgo del patron: es comodo actualizar las referencias sin mirar el
+ * El riesgo del patron: es comodo actualizar las referencias sin mirar el
  * diff, y ahi la prueba deja de proteger. Revise SIEMPRE la imagen de
  * diferencias antes de aceptar una actualizacion.
  *

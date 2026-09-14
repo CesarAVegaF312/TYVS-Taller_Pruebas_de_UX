@@ -47,9 +47,9 @@ menos **dos**: uno funcional y uno de **usabilidad o accesibilidad**.
 Un defecto de usabilidad **no** es "no me gusta el color". Debe describir un
 comportamiento observado:
 
-> ❌ "El formulario es confuso."
+> **Mal:** "El formulario es confuso."
 >
-> ✅ "3 de 5 participantes intentaron escribir el documento con puntos
+> **Bien:** "3 de 5 participantes intentaron escribir el documento con puntos
 > (12.345.678) y el campo los rechazó sin explicar por qué. Dos de ellos
 > abandonaron la tarea. Severidad: alta."
 

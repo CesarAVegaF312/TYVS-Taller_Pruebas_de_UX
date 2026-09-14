@@ -28,7 +28,7 @@ Recluta a personas que **no** hayan trabajado en el proyecto. Un compañero que 
 
 Formula tareas como **objetivos**, no como instrucciones. La diferencia decide si la prueba sirve:
 
-| ❌ Instrucción (no sirve) | ✅ Objetivo (sirve) |
+| Instrucción (no sirve) | Objetivo (sirve) |
 |---|---|
 | "Escribe 30 en el campo Edad y pulsa Registrar" | "Inscribe a tu tía Ana, de 30 años, para que pueda votar" |
 | "Desmarca la casilla 'La persona está viva'" | "Te informan que la persona del documento 12345 falleció. Regístralo" |
@@ -96,7 +96,7 @@ El resultado va de 0 a 100. **No es un porcentaje.**
 | 51 – 68 | Aceptable, con problemas |
 | < 51 | Deficiente |
 
-> ⚠️ Un SUS de 68 no es "68%". Es exactamente la media: la mitad de los sistemas medidos puntúan por debajo.
+> Un SUS de 68 no es "68%". Es exactamente la media: la mitad de los sistemas medidos puntúan por debajo.
 
 ---
 
