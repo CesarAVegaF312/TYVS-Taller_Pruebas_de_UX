@@ -1,6 +1,7 @@
 """Genera la presentacion del taller: "Pruebas de UI y UX.pptx" en la raiz del repositorio.
 
     python docs/presentacion/construir.py            (desde la raiz del repo)
+    python docs/presentacion/construir.py otra.pptx  (en otra ruta)
 
 Usa el mismo sistema visual que la presentacion del taller de carga (kit.py) y
 las capturas reales de docs/presentacion/img, que produce capturas.js. Si la
@@ -26,7 +27,8 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.abspath(os.path.join(AQUI, '..', '..'))
 IMG = os.path.join(AQUI, 'img')
 SNAP = os.path.join(RAIZ, 'playwright', 'tests', 'modulo4-visual.spec.js-snapshots')
-SALIDA = os.path.join(RAIZ, 'Pruebas de UI y UX.pptx')
+# Con un argumento se escribe en otra ruta (util si el archivo esta abierto en PowerPoint).
+SALIDA = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.path.join(RAIZ, 'Pruebas de UI y UX.pptx')
 
 d = Deck(pie='Taller de pruebas de UI y UX')
 
@@ -102,7 +104,8 @@ navegador(s, 7.75, 0.8, 5.0, os.path.join(IMG, 'portada.png'), max_h=5.95)
 # ---------------------------------------------------------------- 2. mapa
 
 s = d.slide('Siete módulos, cinco preguntas distintas', 'Mapa de la sesión', notes=(
-    'Mapa del taller. Los módulos 1 a 4 se automatizan con Playwright (28 pruebas en total; '
+    'Mapa del taller. E2E significa end to end, de extremo a extremo: probar el sistema completo como lo '
+    'usaría una persona, desde el navegador hasta el servidor. Los módulos 1 a 4 se automatizan con Playwright (28 pruebas en total; '
     'Selenium es la pista alternativa, con 7). El 5 no se automatiza: es una sesión con cinco '
     'personas. El 6 es exploratorio y no suma puntos. '
     'Conviene decir desde el principio que el 3B existe para ver fallar a la herramienta: '
@@ -170,6 +173,9 @@ text(s, 0.6, 5.25, 11.5, 1.2, [
     [('Un formulario puede pasar las 28 pruebas automatizadas ', {'bold': True, 'color': C['ink']}),
      ('y aun así hacer que la gente abandone en el segundo campo. La usabilidad se mide observando '
       'a personas, no ejecutando código.', {})]], size=18, color=C['ink2'], line=1.2)
+text(s, 0.6, 6.45, 12.1, 0.4, [[('E2E ', {'bold': True, 'color': C['ink2']}),
+     ('(end to end, de extremo a extremo): probar el sistema completo como lo usaría una persona, del navegador al servidor.', {})]],
+     size=12, color=C['muted'])
 
 
 # ---------------------------------------------------------------- 4. sistema bajo prueba
@@ -186,7 +192,7 @@ pasos = [
      'Si falla, muestra el error y no llama al servidor.', C['blue100'], C['blue600']),
     ('Capa 2 · POST /register (Spring Boot)', 'Valida documento, vida, edad y duplicados, en ese orden, '
      'y responde VALID o el motivo: INVALID, DEAD, INVALID_AGE, UNDERAGE o DUPLICATED.', C['blue100'], C['blue600']),
-    ('Resultado en pantalla', 'Un mensaje con role="status", para que un lector de pantalla lo anuncie.',
+    ('Resultado en pantalla', 'Con role="status" (ARIA), el lector de pantalla, el programa que lee en voz alta, lo anuncia.',
      C['plane'], C['ink']),
 ]
 py_ = 1.75
@@ -200,7 +206,54 @@ for i, (tit, desc, fondo, col) in enumerate(pasos):
 navegador(s, 8.5, 1.55, 3.45, os.path.join(IMG, 'formulario-resultado.png'))
 
 
-# ---------------------------------------------------------------- 5. localizadores
+# ---------------------------------------------------------------- 5. que es Playwright
+
+s = d.slide('Playwright: un navegador controlado por código', 'Módulo 1 · La herramienta', notes=(
+    'Antes de la primera línea de código, qué es Playwright. Es una librería de Microsoft que abre un navegador '
+    'real (en el taller, Chromium) y lo maneja desde JavaScript: navega, escribe, hace clic y verifica lo que ve. '
+    'La prueba de la derecha es la 01 del módulo 1, tal como está en el repositorio. '
+    'Tres palabras aparecen en todo el taller: test (una prueba), el localizador (cómo se encuentra un elemento) y '
+    'expect (la aserción: lo que debe cumplirse). Playwright reintenta cada expect hasta que se cumple o se acaba el '
+    'tiempo, y eso es lo que hace innecesarias las esperas fijas. '
+    'npm test no necesita que la Registraduría esté corriendo: webServer, en playwright.config.js, la levanta, '
+    'espera a que /actuator/health responda y la apaga al terminar. Para verlo trabajar: npm run test:headed.'))
+pasos_pw = [
+    ('Qué es', 'Una librería de Microsoft que abre un navegador real (aquí, Chromium) y lo maneja desde JavaScript.'),
+    ('Qué es page', 'La pestaña del navegador. Cada prueba recibe una nueva y limpia, sin lo que dejó la anterior.'),
+    ('Cómo corre', 'npm test ejecuta todas las pruebas. Antes, webServer levanta la Registraduría y espera a que responda.'),
+]
+for i, (t, desc) in enumerate(pasos_pw):
+    yy = 1.8 + i * 1.3
+    dot(s, 0.8, yy + 0.2, 0.38, C['s1'])
+    text(s, 0.61, yy + 0.06, 0.38, 0.3, str(i + 1), size=13, bold=True, color='#ffffff', align=PP_ALIGN.CENTER)
+    text(s, 1.2, yy, 4.6, 0.4, t, size=16, bold=True)
+    text(s, 1.2, yy + 0.4, 4.6, 0.8, desc, size=13, color=C['ink2'], line=1.15)
+text(s, 0.6, 5.75, 5.3, 1.0, [
+    [('Para verlo trabajar: ', {'bold': True, 'color': C['ink']}), ('npm run test:headed', {'font': MONO, 'color': C['ink']}),
+     ('. Para ir paso a paso: ', {}), ('npm run test:ui', {'font': MONO, 'color': C['ink']}), ('.', {})]],
+     size=13, color=C['ink2'], line=1.3)
+text(s, 6.2, 1.7, 6.5, 0.35, 'Una prueba real: la 01 del módulo 1', size=14, bold=True, color=C['s1'])
+code(s, 6.2, 2.1, 6.55, 2.55,
+     "test.beforeEach(async ({ page }) => {\n"
+     "  await page.goto('/');        // http://localhost:8080/\n"
+     "});\n\n"
+     "test('01 - La página carga con el título correcto',\n"
+     "  async ({ page }) => {\n"
+     "    await expect(page).toHaveTitle(/Registraduría/);\n"
+     "    await expect(page.getByRole('heading',\n"
+     "      { name: 'Inscripción de votantes' })).toBeVisible();\n"
+     "  });",
+     size=11, highlight={4: C['s1']})
+glosario = [('test(...)', 'una prueba: un escenario con su nombre'),
+            ('page.getByRole(...)', 'un localizador: cómo se encuentra un elemento'),
+            ('expect(...)', 'una aserción: lo que debe cumplirse; se reintenta sola')]
+for i, (t, desc) in enumerate(glosario):
+    yy = 4.9 + i * 0.45
+    text(s, 6.2, yy, 2.3, 0.35, t, size=12, font=MONO, bold=True, color=C['ink'])
+    text(s, 8.55, yy, 4.2, 0.35, desc, size=12, color=C['ink2'])
+
+
+# ---------------------------------------------------------------- 6. localizadores
 
 s = d.slide('Buscar los elementos como los busca una persona', 'Módulo 1 · Localizadores', notes=(
     'Tres formas de encontrar el mismo botón. getByRole sobrevive a un rediseño y además '
@@ -244,13 +297,14 @@ text(s, 0.6, 4.35, 6.1, 1.8,
 tarjeta(s, 7.2, 1.7, 5.55, 4.85, fill='#ffffff', line_=C['border'])
 text(s, 7.5, 1.95, 5.0, 0.3, 'MEDIDO EN ESTE REPOSITORIO', size=11, bold=True, color=C['s2'], spacing=1)
 text(s, 7.5, 2.3, 5.0, 1.0, '1 de cada 30', size=44, bold=True, color=C['critical'])
-text(s, 7.5, 3.2, 5.0, 0.7, ['ejecuciones fallaba con "Documento ya inscrito".', 'Medido con --repeat-each=30 y 8 workers.'],
+text(s, 7.5, 3.2, 5.0, 0.7, ['ejecuciones fallaba con "Documento ya inscrito".', 'Medido con --repeat-each=30 (cada prueba 30 veces) '
+      'y 8 workers (8 procesos en paralelo).'],
      size=13, color=C['ink2'], line=1.15)
-code(s, 7.5, 4.05, 4.95, 1.05,
+code(s, 7.5, 4.2, 4.95, 1.05,
      "// Antes: dos copias, mismo milisegundo\nDate.now() % 1000000\n"
      "// Ahora: 900 millones de valores\nMath.floor(Math.random() * 900_000_000)",
      size=11, highlight={1: C['critical'], 3: C['goodtext']})
-text(s, 7.5, 5.35, 5.0, 1.0, 'Para cazar una prueba inestable, repítala en paralelo: --repeat-each es la forma estándar.',
+text(s, 7.5, 5.45, 5.0, 1.0, 'Para cazar una prueba inestable, repítala en paralelo: --repeat-each es la forma estándar.',
      size=12, color=C['ink2'], line=1.15)
 
 
@@ -317,9 +371,60 @@ text(s, 4.6, 5.95, 8.15, 0.7, 'Una suite E2E mide lo que se alcanza a través de
      size=13, color=C['ink'], bold=True, line=1.15)
 
 
-# ---------------------------------------------------------------- 9. accesibilidad
+# ---------------------------------------------------------------- 9. que es axe
 
-s = d.slide('Una suite de axe en verde no dice "el sitio es accesible"', 'Módulo 3 · Accesibilidad', notes=(
+# La salida de ejemplo es real: axe 4.13.0 sobre defectuosa.html con el filtro
+# WCAG (6 reglas violadas; index.html, 0). Si se actualiza @axe-core/playwright,
+# conviene repetir la medicion antes de regenerar.
+s = d.slide('axe: un revisor automático de accesibilidad', 'Módulo 3 · La herramienta', notes=(
+    'Antes de hablar de sus límites, qué es axe. Es un motor de código abierto (axe-core, de la empresa Deque) '
+    'que recorre la página ya dibujada en el navegador y la compara contra reglas de WCAG. En el taller se usa '
+    'desde Playwright con la librería @axe-core/playwright: la prueba abre la página, le pide a axe que la '
+    'analice y exige que la lista de violaciones esté vacía. '
+    'La salida de abajo es real: es lo que imprime la prueba del taller cuando se ejecuta axe sobre '
+    'defectuosa.html. Cada violación dice la regla, el impacto, cómo corregirla y el selector del elemento. '
+    'Axe responde en inglés; los mensajes no se traducen. '
+    'Cuando se dice "las pruebas de axe pasan" o "salen en verde" se quiere decir exactamente esto: la lista vino vacía. '
+    'Abajo, WCAG: la norma que axe revisa. Las leyes, como la EAA, suelen exigir el nivel AA.'))
+pasos_axe = [
+    ('Qué es', 'Un motor de código abierto (axe-core, de Deque) que revisa la página contra reglas de WCAG.'),
+    ('Cómo se usa aquí', 'Playwright abre la página y @axe-core/playwright se la pasa a axe para que la analice.'),
+    ('Qué devuelve', 'Una lista de violaciones: la regla, qué tan grave es, cómo corregirla y en qué elemento está.'),
+]
+for i, (t, desc) in enumerate(pasos_axe):
+    yy = 1.75 + i * 1.2
+    dot(s, 0.8, yy + 0.2, 0.38, C['s1'])
+    text(s, 0.61, yy + 0.06, 0.38, 0.3, str(i + 1), size=13, bold=True, color='#ffffff', align=PP_ALIGN.CENTER)
+    text(s, 1.2, yy, 4.6, 0.4, t, size=16, bold=True)
+    text(s, 1.2, yy + 0.4, 4.6, 0.8, desc, size=13, color=C['ink2'], line=1.15)
+text(s, 6.2, 1.7, 6.5, 0.35, 'La prueba del módulo 3', size=14, bold=True, color=C['s1'])
+code(s, 6.2, 2.1, 6.55, 1.45,
+     "const resultados = await new AxeBuilder({ page })\n"
+     "  .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])\n"
+     "  .analyze();\n\n"
+     "expect(resultados.violations).toEqual([]);",
+     size=11, highlight={4: C['s1']})
+text(s, 6.2, 3.95, 6.5, 0.35, 'Lo que imprime si falla (salida real sobre defectuosa.html)', size=14, bold=True, color=C['critical'])
+code(s, 6.2, 4.35, 6.55, 0.98,
+     "[critical] image-alt: Images must have alternative text\n"
+     "  https://dequeuniversity.com/rules/axe/4.13/image-alt\n"
+     "    img:nth-child(2)",
+     size=11, highlight={0: C['critical']})
+text(s, 6.2, 5.42, 6.55, 0.5, [[('La prueba pasa solo si la lista viene vacía: ', {'bold': True, 'color': C['ink']}),
+     ('0 violaciones en index.html, 6 reglas en defectuosa.html. Axe responde en inglés.', {})]],
+     size=11, color=C['ink2'], line=1.15)
+tarjeta(s, 0.6, 5.95, 12.15, 0.78, fill=C['blue100'])
+text(s, 0.85, 6.06, 11.7, 0.75, [
+    [('WCAG ', {'bold': True, 'color': C['blue600']}),
+     ('(Web Content Accessibility Guidelines, del W3C) es la norma internacional de accesibilidad web. Tiene versiones '
+      '(2.0, 2.1) y niveles: A es lo mínimo, AA es el que suelen exigir las leyes y AAA el más estricto. Las etiquetas '
+      'del código se leen así: ', {}), ('wcag21aa', {'font': MONO, 'bold': True, 'color': C['ink']}),
+     (' = WCAG 2.1, nivel AA.', {})]], size=12, color=C['ink'], line=1.15)
+
+
+# ---------------------------------------------------------------- 10. accesibilidad
+
+s = d.slide('Sin violaciones de axe no es lo mismo que accesible', 'Módulo 3 · El límite de la herramienta', notes=(
     'Contexto legal: el European Accessibility Act es exigible desde junio de 2025 y en Estados Unidos '
     'la ADA genera litigio constante. Pero lo importante del módulo es el limite de la herramienta: axe '
     'detecta de forma fiable cerca del 40 % de los problemas WCAG, los mecánicos. Lo demás exige juicio. '
@@ -362,7 +467,10 @@ s = d.slide('17 defectos sembrados, en tres montones', 'Módulo 3B · Ver a la h
 grupos = [('A', 7, 'axe los reporta con .withTags([...wcag...])', '6 reglas', C['s1'], C['blue100']),
           ('B', 3, 'axe los reporta solo si se quita ese filtro', '4 reglas', C['s2'], C['orange100']),
           ('C', 7, 'axe no los reporta nunca', 'revisión manual', C['ink2'], C['plane'])]
-bx, bw_total, by = 0.6, 12.13, 1.85
+text(s, 0.6, 1.62, 12.1, 0.45, [[('defectuosa.html ', {'bold': True, 'font': MONO, 'color': C['ink']}),
+     ('es la misma pantalla del formulario con 17 defectos de accesibilidad puestos a propósito. Como se sabe cuáles son, '
+      'se puede medir qué encuentra axe.', {})]], size=13, color=C['ink2'], line=1.15)
+bx, bw_total, by = 0.6, 12.13, 2.3
 unidad = bw_total / 17
 for g, n, desc, cuenta, col, fnd in grupos:
     w_ = n * unidad
@@ -371,7 +479,8 @@ for g, n, desc, cuenta, col, fnd in grupos:
                     [(f'{n} defectos', {'size': 13, 'color': '#ffffff'})]])
     bx += w_
 reglas = {
-    'A': ['button-name · color-contrast · html-has-lang', 'image-alt · link-name · select-name'],
+    'A': ['button-name: botón sin nombre', 'color-contrast: poco contraste', 'html-has-lang: sin idioma',
+          'image-alt: imagen sin alt', 'link-name: enlace sin texto', 'select-name: lista sin etiqueta'],
     'B': ['heading-order', 'landmark-one-main', 'region', 'tabindex'],
     'C': 'placeholder como única etiqueta, alt="imagen", foco invisible, casilla "Estado", resultado sin role="status", '
          '"Haga clic aquí", un error que dice solo "Error."',
@@ -379,12 +488,12 @@ reglas = {
 cx = 0.6
 anchos = [7 * unidad - 0.06, 3 * unidad - 0.06, 7 * unidad - 0.06]
 for (g, n, desc, cuenta, col, fnd), aw in zip(grupos, anchos):
-    text(s, cx, 3.0, aw, 0.35, cuenta, size=13, bold=True, color=col)
-    text(s, cx, 3.35, aw, 0.8, desc, size=13, color=C['ink'], line=1.15)
-    text(s, cx, 4.15, aw, 1.7, reglas[g], size=12, color=C['ink2'], line=1.2,
-         font=MONO if g != 'C' else FONT)
+    text(s, cx, 3.35, aw, 0.35, cuenta, size=13, bold=True, color=col)
+    text(s, cx, 3.68, aw, 0.8, desc, size=13, color=C['ink'], line=1.15)
+    text(s, cx, 4.35, aw, 1.7, reglas[g], size=11 if g == 'A' else 12, color=C['ink2'], line=1.1,
+         font=MONO if g == 'B' else FONT)
     cx += aw + 0.06
-text(s, 0.6, 6.05, 12.1, 0.7, 'Axe encuentra 10 de 17. Ninguno de los 7 del grupo C: esos los localiza usted, a mano, y explica por qué ninguna herramienta puede detectarlos.',
+text(s, 0.6, 6.25, 12.1, 0.7, 'Axe encuentra 10 de 17. Ninguno de los 7 del grupo C: esos los localiza usted, a mano, y explica por qué ninguna herramienta puede detectarlos.',
      size=14, bold=True, line=1.15)
 
 
@@ -408,11 +517,16 @@ for i, r_ in enumerate(a_reglas + b_reglas):
     oculto = r_ in b_reglas
     pill(s, 6.85 + (i % 2) * 2.95, 3.55 + (i // 2) * 0.5, r_,
          C['s2'] if oculto else C['blue600'], C['orange100'] if oculto else C['blue100'], size=11, w=2.75)
-text(s, 6.85, 6.15, 5.9, 0.6, [[('En naranja: ', {'bold': True, 'color': C['s2']}),
-                                ('la categoría best-practice, que el filtro silencia.', {})]],
-     size=13, color=C['ink2'])
-text(s, 0.6, 5.2, 5.9, 1.3, 'Los mismos defectos siguen en la página. Lo único que cambió es qué se le pidió a axe que mirara.',
-     size=14, color=C['ink2'], line=1.2)
+text(s, 6.85, 6.1, 5.9, 0.8, [[('En naranja, best-practice: ', {'bold': True, 'color': C['s2']}),
+                                ('reglas que axe recomienda aunque WCAG no las pida de forma literal. El filtro WCAG las silencia.', {})]],
+     size=12, color=C['ink2'], line=1.15)
+text(s, 0.6, 5.2, 5.9, 0.35, 'Qué señalan las 4 reglas escondidas', size=13, bold=True)
+ocultas = [('heading-order', 'los títulos saltan de h1 a h4'), ('landmark-one-main', 'la página no tiene <main>'),
+           ('region', 'hay contenido fuera de toda región'), ('tabindex', 'el foco no sigue el orden visual')]
+for i, (r_, desc) in enumerate(ocultas):
+    yy = 5.58 + i * 0.32
+    text(s, 0.6, yy, 2.1, 0.3, r_, size=11, font=MONO, bold=True, color=C['s2'])
+    text(s, 2.75, yy, 3.8, 0.3, desc, size=12, color=C['ink2'])
 
 
 # ---------------------------------------------------------------- 12. placeholder
@@ -425,9 +539,11 @@ s = d.slide('Axe aprueba un campo sin etiqueta', 'Módulo 3B · Grupo C', notes=
     'además de pasar la herramienta.'))
 navegador(s, 0.6, 1.55, 4.55, os.path.join(IMG, 'defectuosa.png'), url='localhost:8080/defectuosa.html', max_h=5.3)
 text(s, 5.65, 1.7, 7.1, 1.4, [
-    [('El placeholder cuenta como nombre accesible ', {'bold': True, 'color': C['ink']}),
-     ('en el cálculo de accname, así que la regla label da el campo por bueno. Pero desaparece en cuanto la persona empieza a escribir.', {})]],
-     size=15, color=C['ink2'], line=1.2)
+    [('El placeholder ', {'bold': True, 'color': C['ink']}), ('(el texto gris dentro del campo) ', {}),
+     ('cuenta como nombre accesible, ', {'bold': True, 'color': C['ink']}),
+     ('el nombre que el lector de pantalla anuncia para el campo. Por eso axe lo da por etiquetado. '
+      'Pero desaparece en cuanto la persona empieza a escribir.', {})]],
+     size=14, color=C['ink2'], line=1.2)
 text(s, 5.65, 3.05, 7.1, 0.35, 'Los 7 defectos que ninguna herramienta ve', size=14, bold=True)
 grupo_c = ['placeholder usado como única etiqueta', 'alt="imagen": existe, pero no describe nada',
            'outline: none, el foco de teclado se vuelve invisible', 'una casilla rotulada "Estado"',
@@ -460,11 +576,13 @@ code(s, 8.0, 1.95, 4.75, 0.95, "npm run test:visual     # comparar\nnpm run visu
      size=12)
 text(s, 8.0, 3.15, 4.75, 1.4, [
     [('El riesgo: ', {'bold': True, 'color': C['critical']}),
-     ('actualizar las referencias sin mirar el diff. Desde ese momento la prueba aprueba cualquier cosa.', {})]],
+     ('actualizar las referencias (las capturas aprobadas) sin mirar el diff, la imagen que marca los píxeles que '
+      'cambiaron. Desde ese momento la prueba aprueba cualquier cosa.', {})]],
      size=14, color=C['ink2'], line=1.2)
 text(s, 8.0, 4.6, 4.75, 1.6, [
     [('Dependen del sistema operativo: ', {'bold': True, 'color': C['ink']}),
-     ('una referencia de Windows no coincide con la de un runner Linux. Por eso el CI del taller no ejecuta este módulo.', {})]],
+     ('una referencia tomada en Windows no coincide con una tomada en Linux, donde corre la integración continua '
+      '(CI). Por eso el CI del taller no ejecuta este módulo.', {})]],
      size=14, color=C['ink2'], line=1.2)
 
 
@@ -619,10 +737,13 @@ sabs = ['S1 · Se inscriben menores de edad', 'S2 · Se aceptan documentos repet
         'S3 · Se inscriben personas fallecidas', 'S4 · La API acepta edades imposibles',
         'S5 · Desaparece la validación del navegador', 'S6 · El resultado deja de anunciarse']
 etq = {'si': 'Detectado', 'no': 'Sobrevivió', 'aviso': 'No ejercitado'}
-text(s, 6.75, 1.68, 2.3, 0.35, 'Suite del taller', size=13, bold=True, align=PP_ALIGN.CENTER)
-text(s, 9.1, 1.68, 2.3, 0.35, 'Ejemplo con defectos típicos', size=12, bold=True, align=PP_ALIGN.CENTER)
+text(s, 0.6, 1.42, 5.95, 0.65, [[('Es la idea de las pruebas de mutación: ', {'bold': True, 'color': C['ink']}),
+     ('un proxy se pone delante de la Registraduría y altera sus respuestas para meter un defecto a la vez. '
+      'Si alguna prueba falla, lo detectó.', {})]], size=12, color=C['ink2'], line=1.15)
+text(s, 6.75, 1.85, 2.3, 0.35, 'Suite del taller', size=13, bold=True, align=PP_ALIGN.CENTER)
+text(s, 9.1, 1.85, 2.3, 0.35, 'Ejemplo con defectos típicos', size=12, bold=True, align=PP_ALIGN.CENTER)
 for i, nom in enumerate(sabs):
-    ry = 2.1 + i * 0.58
+    ry = 2.35 + i * 0.55
     if i % 2 == 0:
         box(s, 0.6, ry - 0.06, 11.0, 0.52, fill=C['plane'], radius=0.1)
     text(s, 0.8, ry + 0.05, 5.8, 0.35, nom, size=14)
@@ -630,9 +751,9 @@ for i, nom in enumerate(sabs):
     estado(s, 9.1 + 0.37, ry + 0.04, etq[SUITE_EJEMPLO[i]], SUITE_EJEMPLO[i])
 tot_t = SUITE_TALLER.count('si')
 tot_e = SUITE_EJEMPLO.count('si')
-text(s, 6.75, 5.62, 2.3, 0.5, f'{tot_t} de 6', size=24, bold=True, color=C['goodtext'], align=PP_ALIGN.CENTER)
-text(s, 9.1, 5.62, 2.3, 0.5, f'{tot_e} de 6', size=24, bold=True, color=C['critical'], align=PP_ALIGN.CENTER)
-text(s, 0.8, 5.65, 5.6, 1.2, [
+text(s, 6.75, 5.75, 2.3, 0.5, f'{tot_t} de 6', size=24, bold=True, color=C['goodtext'], align=PP_ALIGN.CENTER)
+text(s, 9.1, 5.75, 2.3, 0.5, f'{tot_e} de 6', size=24, bold=True, color=C['critical'], align=PP_ALIGN.CENTER)
+text(s, 0.8, 5.8, 5.6, 1.1, [
     [('Sobrevivió ', {'bold': True, 'color': C['critical']}), ('es una aserción débil. ', {}),
      ('No ejercitado ', {'bold': True, 'color': '#7a5600'}), ('es un caso que no existe. ', {}),
      ('Las dos suites pasan en verde con la aplicación intacta.', {'bold': True, 'color': C['ink']})]],
@@ -647,8 +768,8 @@ s = d.slide('Playwright o Selenium: la misma aplicación, dos pistas', 'Herramie
     'esperar a mano con WebDriverWait y tener la app corriendo. Accesibilidad y regresión visual son nativas o casi '
     'en Playwright. Selenium sigue siendo el estándar histórico y soporta prácticamente todos los lenguajes.'))
 filas = [('', 'Playwright', 'Selenium'),
-         ('Espera automática', 'Sí', 'Manual (WebDriverWait)'),
-         ('Levanta la aplicación', 'Sí (webServer)', 'No'),
+         ('Espera automática', 'Sí', 'Manual: se pide con WebDriverWait'),
+         ('Levanta la aplicación', 'Sí, con webServer en la configuración', 'No: hay que arrancarla antes'),
          ('Accesibilidad', '@axe-core/playwright', 'Requiere integración'),
          ('Regresión visual', 'Nativa', 'Librería externa'),
          ('Lenguajes', 'JS/TS, Python, Java, .NET', 'Prácticamente todos'),
