@@ -65,6 +65,10 @@ Tareas sugeridas para la Registraduría:
 
 ### SUS (System Usability Scale)
 
+**Qué mide y por qué se usa.** Las métricas de arriba registran lo que la persona **hizo**. SUS mide lo que **percibió**: qué tan fácil de usar le pareció el sistema. Las dos cosas pueden no coincidir, y por eso se miden ambas: alguien puede completar todas las tareas y aun así sentir que el sistema es confuso.
+
+Lo creó John Brooke en 1986 y hoy es el cuestionario de usabilidad más usado. Su valor está en que es **estándar**: las mismas 10 afirmaciones, siempre en el mismo orden y con el mismo cálculo. Eso permite comparar el puntaje con el de otros sistemas. Si cambia una afirmación, el resultado ya no se puede comparar. Las afirmaciones se alternan a propósito: las impares son positivas y las pares negativas, para que nadie responda "5" a todo sin leer.
+
 Cuestionario de 10 preguntas que se aplica **al terminar** la sesión. Cada una se responde de 1 (totalmente en desacuerdo) a 5 (totalmente de acuerdo):
 
 1. Creo que usaría este sistema con frecuencia.

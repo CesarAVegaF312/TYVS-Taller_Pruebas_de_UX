@@ -235,6 +235,8 @@ El único módulo que **no se automatiza**, y por eso el que mejor explica qué 
 
 Cinco participantes, tareas planteadas como objetivos (no como instrucciones), medición de tasa de éxito de tarea y tiempo en tarea, y cuestionario **SUS** al final.
 
+> **SUS** (*System Usability Scale*) es un cuestionario estándar de 10 afirmaciones que cada participante califica de 1 a 5 al terminar la sesión. Da un puntaje de 0 a 100 que **no es un porcentaje**: 68 es el promedio de la industria. Mientras las otras métricas registran lo que la persona **hizo**, SUS mide lo que **percibió**. Las afirmaciones, el cálculo y la interpretación están en [el protocolo](docs/protocolo-pruebas-con-usuarios.md#sus-system-usability-scale).
+
 La pregunta que cierra el taller: *¿qué problema encontraron los usuarios que ninguna de las 28 pruebas automatizadas podía detectar?*
 
 ### Módulo 6 — Probar con IA ([`docs/modulo6-probar-con-ia.md`](docs/modulo6-probar-con-ia.md))

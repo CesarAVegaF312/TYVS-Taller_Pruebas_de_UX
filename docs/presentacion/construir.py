@@ -621,22 +621,34 @@ text(s, 0.6, 6.05, 12.1, 0.8, [
 # ---------------------------------------------------------------- 15. SUS
 
 s = d.slide('SUS: 68 no es "68 %", es exactamente el promedio', 'Módulo 5 · System Usability Scale', notes=(
+    'SUS, System Usability Scale: un cuestionario estándar creado por John Brooke en 1986. Las otras métricas '
+    'registran lo que la persona hizo; SUS mide lo que percibió. Como es estándar, permite comparar con otros sistemas, '
+    'siempre que no se cambien las afirmaciones. Se alternan positivas (impares) y negativas (pares) para que nadie '
+    'responda 5 a todo sin leer. '
     'Diez preguntas al terminar la sesión, de 1 a 5. Las impares suman x - 1, las pares 5 - x, y la suma se '
     'multiplica por 2,5. El resultado va de 0 a 100 y no es un porcentaje. 68 es la media de la industria: la '
     'mitad de los sistemas medidos puntúan por debajo. Bandas de Sauro y Lewis.'))
-text(s, 0.6, 1.75, 4.6, 0.4, 'Cómo se calcula', size=16, bold=True)
+tarjeta(s, 0.6, 1.6, 12.15, 0.95, fill=C['orange100'])
+text(s, 0.85, 1.72, 11.7, 0.75, [
+    [('SUS (System Usability Scale): ', {'bold': True, 'color': C['s2']}),
+     ('10 afirmaciones estándar que cada participante califica de 1 a 5 al terminar. Mide la usabilidad que la persona '
+      'percibió, no lo que hizo. Se alternan: ', {}),
+     ('"Pensé que el sistema era fácil de usar"', {'italic': True, 'color': C['ink']}), (' (impar, positiva) y ', {}),
+     ('"Encontré el sistema innecesariamente complejo"', {'italic': True, 'color': C['ink']}), (' (par, negativa).', {})]],
+     size=13, color=C['ink2'], line=1.15)
+text(s, 0.6, 2.8, 4.6, 0.4, 'Cómo se calcula', size=16, bold=True)
 calc = [('1', 'Impares (1, 3, 5, 7, 9): ', 'x − 1'), ('2', 'Pares (2, 4, 6, 8, 10): ', '5 − x'),
         ('3', 'Sume los 10 valores y ', 'multiplique por 2,5')]
 for i, (n, a, b_) in enumerate(calc):
-    yy = 2.3 + i * 0.75
+    yy = 3.3 + i * 0.7
     dot(s, 0.8, yy + 0.2, 0.38, C['s1'])
     text(s, 0.61, yy + 0.06, 0.38, 0.3, n, size=13, bold=True, color='#ffffff', align=PP_ALIGN.CENTER)
     text(s, 1.2, yy + 0.04, 4.2, 0.6, [[(a, {}), (b_, {'bold': True, 'font': MONO, 'color': C['ink']})]],
          size=14, color=C['ink2'])
-text(s, 0.6, 4.65, 4.5, 1.2, 'Resultado de 0 a 100. No es un porcentaje: es una posición frente a otros sistemas medidos.',
+text(s, 0.6, 5.55, 4.5, 1.2, 'Resultado de 0 a 100. No es un porcentaje: es una posición frente a otros sistemas medidos.',
      size=14, color=C['ink2'], line=1.2)
 # escala 0-100 con bandas
-ex, ew, ey = 5.8, 6.9, 2.6
+ex, ew, ey = 5.8, 6.9, 3.6
 def xs(v):
     return ex + ew * v / 100
 bandas = [(0, 51, 'Deficiente', '#f6d8d8', C['critical']), (51, 68, 'Aceptable', '#fdecc4', '#7a5600'),
@@ -649,11 +661,11 @@ for v in [0, 51, 68, 80.3, 100]:
     text(s, xs(v) - 0.5, ey + 1.1, 1.0, 0.3, etq, size=12, color=C['ink2'], align=PP_ALIGN.CENTER)
 line(s, xs(68), ey - 0.35, xs(68), ey + 1.0, color=C['ink'], width=2)
 text(s, xs(68) - 1.6, ey - 0.75, 3.2, 0.35, 'Promedio de la industria', size=13, bold=True, align=PP_ALIGN.CENTER)
-text(s, ex, 4.25, ew, 1.6, [
+text(s, ex, 5.2, ew, 1.2, [
     [('Ejemplo: ', {'bold': True, 'color': C['ink']}),
      ('un promedio de 72,5 queda en "bueno", apenas por encima de la media. Un 50 no es "la mitad de bien": '
       'es peor que la mayoría de los sistemas medidos.', {})]], size=14, color=C['ink2'], line=1.2)
-text(s, ex, 5.75, ew, 0.4, 'Bandas de Sauro y Lewis. Más de 80,3 corresponde al percentil 90.', size=11, color=C['muted'])
+text(s, ex, 6.45, ew, 0.4, 'Bandas de Sauro y Lewis. Más de 80,3 corresponde al percentil 90.', size=11, color=C['muted'])
 
 
 # ---------------------------------------------------------------- 16. modulo 6: ciclo
