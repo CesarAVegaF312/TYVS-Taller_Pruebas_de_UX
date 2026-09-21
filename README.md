@@ -7,6 +7,8 @@ Este taller cubre dos cosas que suelen confundirse, y la distinción entre ellas
 
 Una aplicación puede pasar todas las pruebas E2E del mundo y seguir siendo inusable. Son preguntas distintas y requieren técnicas distintas.
 
+> **Presentación de la sesión:** [`Pruebas de UI y UX.pptx`](Pruebas%20de%20UI%20y%20UX.pptx), con notas para quien presenta. Se genera con `python docs/presentacion/construir.py` a partir de capturas reales de la Registraduría (`node docs/presentacion/capturas.js`); si cambia la interfaz o alguna cifra del taller, regénerela en vez de editarla a mano.
+
 ---
 
 ## Objetivos
@@ -58,6 +60,7 @@ Eso importa por tres razones:
 │   ├─ protocolo-pruebas-con-usuarios.md   # módulo 5
 │   ├─ modulo6-probar-con-ia.md            # módulo 6: guía de las dos sesiones
 │   ├─ prompts/                            # módulo 6: un prompt por experimento
+│   ├─ presentacion/                       # genera la presentación del taller
 │   ├─ playwright-guide.md
 │   ├─ selenium-guide.md
 │   └─ cicd-guide.md

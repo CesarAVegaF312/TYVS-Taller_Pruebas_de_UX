@@ -12,7 +12,7 @@ Los módulos anteriores automatizan cuatro cosas distintas, y ninguna de ellas r
 | 3 — Accesibilidad | ¿Cumple WCAG lo que una máquina puede medir? | Si el texto alternativo es *útil* |
 | 4 — Regresión visual | ¿Cambió algo sin querer? | Si lo que se ve es *comprensible* |
 
-Un formulario puede pasar las 21 pruebas automatizadas y aun así hacer que la gente abandone en el segundo campo. La usabilidad se mide **observando a personas**, no ejecutando código.
+Un formulario puede pasar las 28 pruebas automatizadas y aun así hacer que la gente abandone en el segundo campo. La usabilidad se mide **observando a personas**, no ejecutando código.
 
 ---
 
@@ -118,7 +118,7 @@ En el Wiki del repositorio:
    - severidad (alta / media / baja),
    - cambio propuesto.
 4. **SUS promedio** con su interpretación.
-5. **Reflexión**: ¿qué problema encontraron los usuarios que **ninguna** de las 21 pruebas automatizadas podía detectar? Esta pregunta es el objetivo de todo el módulo.
+5. **Reflexión**: ¿qué problema encontraron los usuarios que **ninguna** de las 28 pruebas automatizadas podía detectar? Esta pregunta es el objetivo de todo el módulo.
 
 ---
 
