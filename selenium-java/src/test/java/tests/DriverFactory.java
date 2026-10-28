@@ -4,6 +4,10 @@ package tests;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.net.MalformedURLException;
+import java.net.URI;
 
 /**
  * Factory para crear instancias de WebDriver.
@@ -27,6 +31,18 @@ public class DriverFactory {
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
             options.addArguments("--window-size=1920,1080");
+        }
+
+        // Navegador remoto si se pasa -Dselenium.remote.url=http://localhost:4444
+        // (el Selenium Grid de docker compose). El navegador corre en el
+        // contenedor, asi que no depende del Chrome ni del chromedriver del equipo.
+        String remoteUrl = System.getProperty("selenium.remote.url", "");
+        if (!remoteUrl.isBlank()) {
+            try {
+                return new RemoteWebDriver(URI.create(remoteUrl).toURL(), options);
+            } catch (MalformedURLException e) {
+                throw new IllegalArgumentException("selenium.remote.url invalida: " + remoteUrl, e);
+            }
         }
 
         return new ChromeDriver(options);

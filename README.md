@@ -28,6 +28,7 @@ Una aplicación puede pasar todas las pruebas E2E del mundo y seguir siendo inus
 - [Sistema bajo prueba](#sistema-bajo-prueba)
 - [Prerrequisitos](#prerrequisitos)
 - [Puesta en marcha](#puesta-en-marcha)
+- [Ambiente de trabajo reproducible](#ambiente-de-trabajo-reproducible)
 - [Módulos del taller](#módulos-del-taller)
 - [Playwright o Selenium: ¿cuál hago?](#playwright-o-selenium-cuál-hago)
 - [Para entregar](#para-entregar-con-este-taller)
@@ -126,6 +127,49 @@ mvn test -Dheadless=true      # sin interfaz gráfica, como en CI
 ```
 
 > La configuración de Playwright incluye un bloque `webServer` que arranca la Registraduría automáticamente y la apaga al terminar. Selenium no hace eso: hay que levantarla antes. Es una diferencia real entre las dos herramientas y conviene notarla.
+
+---
+
+## Ambiente de trabajo reproducible
+
+El repositorio trae su **ambiente definido como código** en [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json): Java 17, Maven, Node 20, Chromium para Playwright y un Docker propio dentro del contenedor, en las mismas versiones para todo el curso. Es **opcional**: si ya tiene todo instalado, siga con la puesta en marcha de siempre.
+
+- **GitHub Codespaces**, sin instalar nada: en la página del repositorio, *Code → Codespaces → Create codespace*. Se abre VS Code en el navegador. Consume la cuota gratuita de Codespaces: deténgalo al terminar.
+- **VS Code y Docker** en su equipo: instale la extensión *Dev Containers*, abra la carpeta del repositorio y elija *Reopen in Container*.
+
+Al crearse, el ambiente compila la Registraduría, instala las dependencias de Playwright y descarga Chromium. Después `npm test` funciona igual que en su equipo.
+
+> **Por qué importa.** "En mi máquina funciona" casi siempre es una diferencia de ambiente: otra versión de Java, de Maven, del navegador o del sistema operativo. Un ambiente versionado junto al código elimina esa variable. El workflow [`ambiente.yml`](.github/workflows/ambiente.yml) lo comprueba: construye el contenedor y corre la suite dentro de él.
+
+### Navegadores en contenedores
+
+Las pruebas de UI dependen de algo que no es código: el navegador, su driver y las fuentes del sistema operativo. [`docker-compose.yml`](docker-compose.yml) los saca del equipo de cada persona:
+
+```bash
+docker compose up -d --wait        # la Registraduría + Selenium Grid con Chrome
+```
+
+**Selenium contra el Grid.** El navegador corre en el contenedor `selenium`, así que no hace falta tener Chrome ni chromedriver, ni que coincidan sus versiones:
+
+```bash
+cd selenium-java
+mvn test -Dheadless=true -Dselenium.remote.url=http://localhost:4444 -Dbase.url=http://app:8080
+```
+
+Fíjese en las dos URL. Las pruebas hablan con el Grid por `localhost:4444`, pero el navegador vive **dentro** de la red de compose y ve la aplicación como `app:8080`. Para mirar el navegador mientras trabaja, abra <http://localhost:7900> (clave: `secret`).
+
+**Referencias visuales del módulo 4, siempre en el mismo Linux.** Las capturas dependen del sistema operativo y de las fuentes. Si se generan en el contenedor oficial de Playwright, salen idénticas en cualquier equipo y en CI:
+
+```bash
+docker compose --profile visual run --rm playwright npx playwright test tests/modulo4-visual.spec.js --update-snapshots
+docker compose --profile visual run --rm playwright npx playwright test tests/modulo4-visual.spec.js
+```
+
+Así se generan referencias `*-chromium-linux.png`, iguales para todo el grupo. El workflow [`ambiente.yml`](.github/workflows/ambiente.yml) las genera en cada cambio y las publica como artefacto (*referencias-visuales-linux*).
+
+```bash
+docker compose down
+```
 
 ---
 
