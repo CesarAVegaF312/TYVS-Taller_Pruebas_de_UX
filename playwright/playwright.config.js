@@ -29,7 +29,9 @@ module.exports = defineConfig({
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
   ],
 
-  webServer: {
+  // Si BASE_URL apunta a un servicio que ya esta arriba (por ejemplo, el de
+  // docker compose), no se arranca otro: se prueba ese.
+  webServer: process.env.BASE_URL ? undefined : {
     command:
       'java -jar ../registraduria/target/registraduria-1.0-SNAPSHOT.jar',
     url: 'http://localhost:8080/actuator/health',

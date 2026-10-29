@@ -1,0 +1,65 @@
+# La Registraduria y los navegadores en contenedores: el resultado deja de
+# depender del Chrome, del chromedriver y de las fuentes de cada equipo.
+#
+#   docker compose up -d --wait          # app + Selenium Grid con Chrome
+#
+#   # Selenium contra el Grid (el navegador del contenedor ve la app como "app")
+#   cd selenium-java
+#   mvn test -Dheadless=true -Dselenium.remote.url=http://localhost:4444 -Dbase.url=http://app:8080
+#
+#   # Para VER el navegador mientras corre: http://localhost:7900 (clave: secret)
+#
+#   # Referencias visuales del modulo 4, generadas siempre en el mismo Linux
+#   docker compose --profile visual run --rm playwright npx playwright test tests/modulo4-visual.spec.js --update-snapshots
+#   docker compose --profile visual run --rm playwright npx playwright test tests/modulo4-visual.spec.js
+#
+#   docker compose down
+name: tyvs-ux
+
+services:
+  app:
+    build: ./registraduria
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/actuator/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+
+  selenium:
+    # Misma version que selenium-java en selenium-java/pom.xml.
+    image: selenium/standalone-chrome:4.27.0-20241204
+    shm_size: 2gb
+    ports:
+      - "4444:4444"   # WebDriver (Selenium Grid)
+      - "7900:7900"   # noVNC: ver el navegador en vivo, clave "secret"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:4444/status"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    depends_on:
+      app:
+        condition: service_healthy
+
+  # Solo bajo demanda (docker compose --profile visual run).
+  playwright:
+    # Misma version que @playwright/test en playwright/package-lock.json.
+    image: mcr.microsoft.com/playwright:v1.62.1-noble
+    profiles: ["visual"]
+    working_dir: /work/playwright
+    volumes:
+      - .:/work
+      # node_modules propio del contenedor: no pisa el del equipo (que puede
+      # ser de Windows o Mac) ni se mezcla con el.
+      - /work/playwright/node_modules
+    environment:
+      # Con BASE_URL definida, playwright.config.js no arranca otra app: usa esta.
+      BASE_URL: http://app:8080
+    entrypoint: ["bash", "-c", "npm ci --no-audit --no-fund && exec \"$$@\"", "--"]
+    command: ["npx", "playwright", "test", "tests/modulo4-visual.spec.js"]
+    depends_on:
+      app:
+        condition: service_healthy
