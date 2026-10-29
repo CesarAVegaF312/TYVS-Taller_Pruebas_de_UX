@@ -272,6 +272,8 @@ npm run visual:update      # actualizar las referencias
 > **El riesgo del patrón**: es cómodo actualizar las referencias sin mirar el diff, y ahí la prueba deja de proteger. Revise **siempre** la imagen de diferencias antes de aceptar una actualización.
 >
 > Las capturas dependen del sistema operativo y de las fuentes instaladas, así que una referencia generada en Windows no coincide con la de un runner Linux. Por eso el flujo de CI de este taller **no** ejecuta el módulo 4; en un proyecto real se generarían dentro del contenedor oficial de Playwright.
+>
+> **Referencias incluidas solo para Windows.** La carpeta [`playwright/tests/modulo4-visual.spec.js-snapshots/`](playwright/tests/modulo4-visual.spec.js-snapshots/) trae únicamente capturas `*-chromium-win32.png`. En Mac o Linux Playwright busca `*-chromium-darwin.png` o `*-chromium-linux.png`, no las encuentra y la primera ejecución de `npm run test:visual` falla. Genere primero sus propias referencias con `npm run visual:update` (equivale a `--update-snapshots`), revíselas y luego ejecute `npm run test:visual`.
 
 ### Módulo 5 — Usabilidad con usuarios reales ([`docs/protocolo-pruebas-con-usuarios.md`](docs/protocolo-pruebas-con-usuarios.md))
 
