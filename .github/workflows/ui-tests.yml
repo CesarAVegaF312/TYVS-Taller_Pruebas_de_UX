@@ -27,8 +27,11 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Compilar el sistema bajo prueba
-        run: mvn -B -DskipTests clean package
+      # verify y no "package -DskipTests": asi tambien corren las pruebas del
+      # propio sistema bajo prueba (incluida RegistryControllerIT). El jar que
+      # usa Playwright queda en target/ igual que antes.
+      - name: Compilar y probar el sistema bajo prueba
+        run: mvn -B clean verify
         working-directory: registraduria
 
       - uses: actions/setup-node@v4
