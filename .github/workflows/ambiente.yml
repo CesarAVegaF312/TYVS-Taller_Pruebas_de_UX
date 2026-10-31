@@ -33,7 +33,7 @@ jobs:
       - name: Correr la suite dentro del devcontainer
         run: |
           set -o pipefail
-          npx -y @devcontainers/cli@0.89.0 exec --workspace-folder . bash -lc "cd registraduria && mvn -B -DskipTests package && cd ../playwright && npx playwright test tests/modulo1-e2e.spec.js tests/modulo2-pom.spec.js tests/modulo3-accesibilidad.spec.js tests/modulo3b-defectos-sembrados.spec.js" 2>&1 | tee suite.log
+          npx -y @devcontainers/cli@0.89.0 exec --workspace-folder . bash -lc "cd registraduria && mvn -B verify && cd ../playwright && npx playwright test tests/modulo1-e2e.spec.js tests/modulo2-pom.spec.js tests/modulo3-accesibilidad.spec.js tests/modulo3b-defectos-sembrados.spec.js" 2>&1 | tee suite.log
       - name: Mostrar el error en el PR
         if: failure()
         run: |
