@@ -1,0 +1,58 @@
+name: referencias-visuales
+
+# Regenera las referencias del modulo 4 (regresion visual) en el contenedor
+# oficial de Playwright y las sube como commit a la rama del pull request.
+#
+# Se activa a proposito, no en cada cambio: poniendo la etiqueta
+# "actualizar-referencias" al pull request. Actualizar referencias sin mirar
+# el diff es justo el riesgo que advierte el modulo 4. Por eso hace falta la
+# etiqueta, y por eso el resultado queda como un commit del PR, para revisar
+# las imagenes antes de fusionar.
+on:
+  pull_request:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  actualizar:
+    name: Generar referencias en Linux y subirlas al PR
+    # Solo PR del mismo repositorio: desde un fork no hay permiso de escritura.
+    if: github.event.label.name == 'actualizar-referencias' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Levantar la Registraduria
+        run: docker compose up -d --build --wait app
+
+      - name: Generar referencias en el contenedor de Playwright
+        run: docker compose --profile visual run --rm playwright npx playwright test tests/modulo4-visual.spec.js --update-snapshots
+
+      - name: Subir las referencias a la rama del PR
+        run: |
+          # El contenedor de Playwright escribe como root.
+          sudo chown -R "$(id -u):$(id -g)" playwright
+          git add playwright/tests/modulo4-visual.spec.js-snapshots/*-linux.png
+          if git diff --cached --quiet; then
+            echo "Las referencias no cambiaron."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Actualizar referencias visuales del modulo 4 (Linux, contenedor de Playwright)"
+          git push
+
+      - name: Quitar la etiqueta
+        if: always()
+        run: gh pr edit ${{ github.event.pull_request.number }} --remove-label actualizar-referencias
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Apagar
+        if: always()
+        run: docker compose down -v
