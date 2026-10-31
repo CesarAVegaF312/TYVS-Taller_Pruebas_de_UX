@@ -49,11 +49,11 @@ jobs:
       # y espera a /actuator/health antes de empezar. No hace falta arrancarla
       # en un paso aparte.
       #
-      # Se excluye el modulo 4 (regresion visual) a proposito: las capturas de
-      # referencia se generaron en la maquina del estudiante y dependen del
-      # sistema operativo y de las fuentes instaladas, asi que no coinciden con
-      # las de un runner Linux. En un proyecto real se generarian dentro del
-      # contenedor oficial de Playwright.
+      # Se excluye el modulo 4 (regresion visual) a proposito: las capturas
+      # dependen del sistema operativo y de las fuentes instaladas, y este job
+      # corre Playwright directamente en el runner. El modulo 4 se verifica en
+      # ambiente.yml, dentro del contenedor oficial de Playwright, contra las
+      # referencias -linux generadas en ese mismo contenedor.
       - name: Ejecutar pruebas
         run: npx playwright test tests/modulo1-e2e.spec.js tests/modulo2-pom.spec.js tests/modulo3-accesibilidad.spec.js tests/modulo3b-defectos-sembrados.spec.js
         working-directory: playwright

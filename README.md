@@ -165,7 +165,9 @@ docker compose --profile visual run --rm playwright npx playwright test tests/mo
 docker compose --profile visual run --rm playwright npx playwright test tests/modulo4-visual.spec.js
 ```
 
-Así se generan referencias `*-chromium-linux.png`, iguales para todo el grupo. El workflow [`ambiente.yml`](.github/workflows/ambiente.yml) las genera en cada cambio y las publica como artefacto (*referencias-visuales-linux*).
+Así se generan referencias `*-chromium-linux.png`, iguales para todo el grupo, y son las que trae el repositorio. El workflow [`ambiente.yml`](.github/workflows/ambiente.yml) compara contra ellas dentro del contenedor y, si una captura cambia, publica la imagen de diferencias como artefacto (*diferencias-visuales*).
+
+Para **regenerarlas** cuando un cambio de interfaz es intencional, ponga la etiqueta `actualizar-referencias` al *pull request*: el workflow [`referencias-visuales.yml`](.github/workflows/referencias-visuales.yml) las genera en el contenedor y las sube como un commit al PR. Revise las imágenes nuevas en el diff del PR antes de fusionar: aceptar una referencia sin mirarla es exactamente el riesgo del módulo 4.
 
 ```bash
 docker compose down
@@ -271,9 +273,11 @@ npm run visual:update      # actualizar las referencias
 
 > **El riesgo del patrón**: es cómodo actualizar las referencias sin mirar el diff, y ahí la prueba deja de proteger. Revise **siempre** la imagen de diferencias antes de aceptar una actualización.
 >
-> Las capturas dependen del sistema operativo y de las fuentes instaladas, así que una referencia generada en Windows no coincide con la de un runner Linux. Por eso el flujo de CI de este taller **no** ejecuta el módulo 4; en un proyecto real se generarían dentro del contenedor oficial de Playwright.
+> Las capturas dependen del sistema operativo y de las fuentes instaladas, así que una referencia generada en Windows no coincide con la de un runner Linux. Por eso el CI ejecuta el módulo 4 **dentro del contenedor oficial de Playwright**, contra referencias generadas en ese mismo contenedor (ver [Navegadores en contenedores](#navegadores-en-contenedores)).
 >
-> **Referencias incluidas solo para Windows.** La carpeta [`playwright/tests/modulo4-visual.spec.js-snapshots/`](playwright/tests/modulo4-visual.spec.js-snapshots/) trae únicamente capturas `*-chromium-win32.png`. En Mac o Linux Playwright busca `*-chromium-darwin.png` o `*-chromium-linux.png`, no las encuentra y la primera ejecución de `npm run test:visual` falla. Genere primero sus propias referencias con `npm run visual:update` (equivale a `--update-snapshots`), revíselas y luego ejecute `npm run test:visual`.
+> **Qué referencias trae el repositorio.** La carpeta [`playwright/tests/modulo4-visual.spec.js-snapshots/`](playwright/tests/modulo4-visual.spec.js-snapshots/) tiene dos juegos: `*-chromium-win32.png` (Windows) y `*-chromium-linux.png`, generadas en el contenedor oficial de Playwright. En **Windows**, `npm run test:visual` compara contra las `win32` desde la primera ejecución. En **cualquier sistema con Docker** (también dentro del devcontainer y en Codespaces), el comando con el contenedor de Playwright de [Navegadores en contenedores](#navegadores-en-contenedores) compara contra las `linux` desde la primera ejecución.
+>
+> En **Mac**, Playwright busca `*-chromium-darwin.png`, no las encuentra y la primera ejecución falla. Genere sus propias referencias con `npm run visual:update` (equivale a `--update-snapshots`), revíselas y luego ejecute `npm run test:visual`. Lo mismo con `npm run test:visual` en Linux, incluido el devcontainer: ese Chromium y sus fuentes no son los del contenedor oficial y pueden producir diferencias falsas. Ahí lo más simple es usar el comando con el contenedor.
 
 ### Módulo 5 — Usabilidad con usuarios reales ([`docs/protocolo-pruebas-con-usuarios.md`](docs/protocolo-pruebas-con-usuarios.md))
 
