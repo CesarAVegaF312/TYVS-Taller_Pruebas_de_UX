@@ -102,7 +102,7 @@ java -jar target/registraduria-1.0-SNAPSHOT.jar
 Compruebe que responde:
 
 ```bash
-curl http://localhost:8080/actuator/health   # {"status":"UP", ...}
+curl http://localhost:8080/actuator/health   # ... "status":"UP" ...
 ```
 
 Y abra <http://localhost:8080> en el navegador: debería ver el formulario de inscripción.

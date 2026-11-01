@@ -6,10 +6,10 @@ import edu.unisabana.tyvs.registry.domain.model.Person;
 import edu.unisabana.tyvs.registry.domain.model.RegisterResult;
 import edu.unisabana.tyvs.registry.infrastructure.persistence.RegistryRepository;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Pruebas de integración para el caso de uso {@link Registry}, aplicando el formato AAA:
@@ -32,7 +32,7 @@ public class RegistryTest {
      *   <li>Construye el caso de uso inyectando el repositorio.</li>
      * </ul>
      */
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         String jdbc = "jdbc:h2:mem:regdb;DB_CLOSE_DELAY=-1";
         repo = new RegistryRepository(jdbc);
