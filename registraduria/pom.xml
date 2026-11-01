@@ -14,38 +14,22 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
-    <spring-boot.version>2.7.18</spring-boot.version>
+    <spring-boot.version>4.1.2</spring-boot.version>
     <jacoco.skip>true</jacoco.skip>
   </properties>
 
   <dependencies>
-    <!-- JUnit 4 -->
-    <dependency>
-      <groupId>org.junit.vintage</groupId>
-      <artifactId>junit-vintage-engine</artifactId>
-      <version>5.10.2</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.2</version>
-      <scope>test</scope>
-    </dependency>
-
     <!-- Mockito para crear dobles de prueba -->
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.12.0</version>
       <scope>test</scope>
     </dependency>
 
     <!-- Web + JSON -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
+      <artifactId>spring-boot-starter-webmvc</artifactId>
     </dependency>
 
     <!-- Actuator + Micrometer: expone metricas del SERVIDOR (pool de hilos,
@@ -56,10 +40,24 @@
       <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
 
-    <!-- Trae JUnit 5, AssertJ, Hamcrest, Mockito y el soporte de test de Spring -->
+    <!-- Trae JUnit Jupiter, AssertJ, Hamcrest, Mockito y el soporte de test de Spring -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- TestRestTemplate (prueba de sistema por HTTP). Desde Spring Boot 4 vive
+         en su propio modulo y se activa con @AutoConfigureTestRestTemplate. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-resttestclient</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- RestTemplateBuilder, que TestRestTemplate necesita para construirse. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-restclient</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -67,14 +65,12 @@
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <version>2.2.224</version>
       <!-- ¡OJO! quita <scope>test</scope> si quieres usar H2 al arrancar la app -->
     </dependency>
 
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.34</version>
     </dependency>
 
   </dependencies>
@@ -84,7 +80,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <version>3.2.5</version>
+        <version>3.5.6</version>
         <configuration>
           <!-- IMPRESCINDIBLE al usar spring-boot-maven-plugin:repackage.
                Failsafe corre despues de package, y para entonces el jar de
@@ -108,8 +104,9 @@
         </executions>
       </plugin>
       <!-- Version explicita: este pom NO hereda de spring-boot-starter-parent.
-           Sin <version> Maven resolveria la ultima disponible (3.x, incompatible
-           con Boot 2.7). repackage produce el jar ejecutable. -->
+           Sin <version> Maven resolveria la ultima disponible, que puede no
+           coincidir con el BOM importado abajo. repackage produce el jar
+           ejecutable. -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

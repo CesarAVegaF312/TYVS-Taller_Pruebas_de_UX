@@ -1,15 +1,14 @@
 // src/test/java/edu/unisabana/tyvs/registry/delivery/rest/RegistryControllerIT.java
 package edu.unisabana.tyvs.registry.delivery.rest;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Prueba de sistema: levanta la aplicacion completa en un puerto aleatorio y
@@ -19,8 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
  * redefinen aqui: Spring Boot no permite sobrescribir un bean con el mismo
  * nombre, y hacerlo rompia el arranque del contexto.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestRestTemplate
 public class RegistryControllerIT {
 
     @Autowired
