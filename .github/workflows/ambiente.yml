@@ -8,6 +8,10 @@ on:
     paths:
       - '.devcontainer/**'
       - '.github/workflows/ambiente.yml'
+      # Actualizar dependencias tambien cambia el ambiente: debe volver a
+      # comprobarse que se construye y que la suite pasa adentro.
+      - '**/pom.xml'
+      - 'playwright/package-lock.json'
       - 'docker-compose.yml'
       - '**/Dockerfile'
       - 'playwright/playwright.config.js'
