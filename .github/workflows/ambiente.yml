@@ -12,6 +12,8 @@ on:
       - '**/Dockerfile'
       - 'playwright/playwright.config.js'
       - 'selenium-java/src/test/java/tests/DriverFactory.java'
+      - 'playwright/tests/modulo4-visual.spec.js'
+      - 'playwright/tests/modulo4-visual.spec.js-snapshots/**'
   workflow_dispatch:
 
 permissions:
@@ -59,16 +61,18 @@ jobs:
       - name: Selenium con el navegador del contenedor
         run: mvn -B test -Dheadless=true -Dselenium.remote.url=http://localhost:4444 -Dbase.url=http://app:8080
         working-directory: selenium-java
-      # Genera las referencias del modulo 4 en el contenedor oficial de
-      # Playwright y las publica: se pueden descargar y versionar.
-      - name: Referencias visuales en el contenedor de Playwright
-        run: docker compose --profile visual run --rm playwright npx playwright test tests/modulo4-visual.spec.js --update-snapshots
-      - name: Publicar referencias generadas
+      # Regresion visual de verdad: compara contra las referencias -linux
+      # versionadas, generadas en este mismo contenedor. Para regenerarlas,
+      # etiqueta "actualizar-referencias" en el PR (referencias-visuales.yml).
+      - name: Regresion visual (modulo 4) en el contenedor de Playwright
+        run: docker compose --profile visual run --rm playwright npx playwright test tests/modulo4-visual.spec.js
+      - name: Publicar las diferencias si la comparacion falla
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: referencias-visuales-linux
-          path: playwright/tests/modulo4-visual.spec.js-snapshots/*-linux.png
-          if-no-files-found: error
+          name: diferencias-visuales
+          path: playwright/test-results/
+          if-no-files-found: ignore
       - name: Registros si algo fallo
         if: failure()
         run: docker compose logs --no-color
